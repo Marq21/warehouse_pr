@@ -19,7 +19,7 @@ from django.contrib import admin
 from django.urls import include, path
 
 from . import settings
-
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -28,6 +28,7 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('catalog/', include('catalog.urls')),
     path('store_api/', include('store_api.urls')),
+    path('registration/', include('registration_app.urls')),
 ]
 
 if settings.DEBUG:
@@ -35,6 +36,8 @@ if settings.DEBUG:
     urlpatterns = [
         path("__debug__/", include(debug_toolbar.urls)),
     ] + urlpatterns
+    urlpatterns += static(settings.MEDIA_URL,
+                          document_root=settings.MEDIA_ROOT)
 
 handler404 = views.page_not_found
 admin.site.site_header = "Панель администрирования"

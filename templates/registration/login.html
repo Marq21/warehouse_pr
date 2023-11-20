@@ -2,21 +2,20 @@
 
 {% block content %}
   {% if form.errors %}
-    <p>Your username and password didn't match. Please try again.</p>
+    <p>Имя пользователя и пароль не совпадают, попробуйте ещё раз.</p>
   {% endif %}
 
   {% if next %}
     {% if user.is_authenticated %}
-      <p>Your account doesn't have access to this page. To proceed, please login with an account that has access.</p>
+      <p>У вас недостаточно прав</p>
     {% else %}
-      <p>Please login to see this page.</p>
+      <p>Пожалуйста, автроризуйтесь на сайте, чтобы увидеть эту страницу.</p>
     {% endif %}
   {% endif %}
 
   <form method="post" action="{% url 'login' %}">
     {% csrf_token %}
     <table>
-      <caption>Login</caption>
       <tr>
         <td>{{ form.username.label_tag }}</td>
         <td>{{ form.username }}</td>
@@ -28,7 +27,7 @@
       </tr>
     </table>
 
-    <input type="submit" value="login" />
+    <input type="submit" value="Войти" />
     <input type="hidden" name="next" value="{{ next }}" />
   </form>
   <a href="{% url 'auth' %}">Login by GitHub</a>
@@ -36,4 +35,8 @@
   <p>
     <a href="{% url 'password_reset' %}">Lost password?</a>
   </p>
+  <p>
+    Всё ещё нет аккаунта?
+    <a href="{% url "register" %}">Регистрация тут</a>.
+  </p> 
 {% endblock %}
