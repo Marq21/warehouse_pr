@@ -1,0 +1,24 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+<div class="noms-detail">
+  <h2>Наименование: {{ nomenclature.name }}<h2>
+
+  <p class="detail-nom-item">Цена: {{ nomenclature.cost }}</p>
+  <p class="detail-nom-item">Тип товара: {{ nomenclature.get_weight_or_piece_display }}</p>
+  <p class="detail-nom-item">Штрих-код: {{ nomenclature.barcode }}</p>
+  <p class="detail-nom-item">Категория: {{ nomenclature.category }}</p>
+  <br>
+  <p>
+    <a href="{% url 'edit-nomenclature' nomenclature.id %}">
+      Изменить
+    </a>
+  </p>
+  <p>
+    <a href="{% url 'nom_share' nomenclature.id %}">
+      Поделиться
+    </a>
+  </p>
+</div>
+
+{% endblock %}

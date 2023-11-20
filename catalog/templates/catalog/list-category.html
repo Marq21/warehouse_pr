@@ -1,0 +1,14 @@
+{% extends 'base_generic.html' %}
+
+{% block title %}
+      <title>Категории товаров</title>
+{% endblock %}
+
+{% block content %}
+    <ul>
+        {% for cat in cats %}
+            <li><a href="{{ cat.get_absolute_url }}"> {{cat.name}}</a></li>
+        {% endfor %}
+    </ul>
+    {% include "catalog/add_category_button_href.html" %}
+{% endblock %}

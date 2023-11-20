@@ -1,0 +1,37 @@
+{% extends 'base_generic.html' %}
+
+{% block title %}
+      <title>Search</title>
+{% endblock %}
+
+{% block content %}
+
+    {% if query %}
+        <h1>Nomenclature containing "{{ query }}"</h1>
+        <h3>
+            {% with results.count as total_results %}
+                Found {{ total_results }} result{{ total_results|pluralize }}
+            {% endwith %}
+        </h3>
+        {% for nom in results %}
+            <h4>
+                <a href="{{ nom.get_absolute_url }}">
+                    {{ nom.name }}
+                </a>
+            </h4>
+            <a href="{{ nom.category.get_absolute_url }}">
+                {{ nom.category }}
+            </a>
+        {% empty %}
+            <p>There are no results for your query.</p>
+        {% endfor %}
+        <p><a href="{% url 'nom-search' %}">Search again</a></p>
+    {% else %}
+        <h1>Search for Nomenclature</h1>
+        <form method="GET">
+            {{ form.as_p }}
+            <input type="submit" value="Search">
+        </form>
+    {% endif %}
+
+{% endblock %}

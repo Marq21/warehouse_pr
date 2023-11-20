@@ -1,0 +1,12 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+<div class="noms-detail">
+    <h2>Наименование: {{ nom.name }}<h2>
+
+    <p class="detail-nom-item">Цена: {{ nom.cost }}</p>
+    <p class="detail-nom-item">Тип товара: {{ nom.get_weight_or_piece_display }}</p>
+    <p class="detail-nom-item">Штрих-код: {{ nom.barcode }}</p>
+    <p class="detail-nom-item">Категория: {{ nom.category }}</p>
+</div>
+{% endblock %}

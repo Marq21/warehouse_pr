@@ -1,0 +1,15 @@
+{% extends "base_generic.html" %}
+{% block content %}
+    <h1>Список товаров</h1>
+    {% if nomenclature_list %}
+    <ul>
+      {% for nomenclature in nomenclature_list %}
+        <li><a href="{{ nomenclature.get_absolute_url }}">{{ nomenclature.name }} ({{nomenclature.cost}} &#8381)</li>
+      {% endfor %}
+    </ul>
+    {% else %}
+      <p>Base is empty</p>
+    {% endif %}
+    {% include 'catalog/add_nom_button_href.html'%}
+    <a href="{% url 'nom-search' %}"> Поиск товаров </a>
+{% endblock %}

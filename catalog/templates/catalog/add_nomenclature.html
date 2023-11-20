@@ -1,0 +1,23 @@
+{% extends 'base_generic.html' %}
+
+{% block title %}
+      <title>{{title}}</title>
+{% endblock %}
+
+{% block content %}
+
+    <h1>{{title}}</h1>
+    <div class="form-fields"> 
+        <form action="" method="POST">
+            {% csrf_token %}
+            <div class="form-error">{{ form.non_field_errors}}</div>
+            {% for f in form %}          
+                <p class="form-field">
+                        <label class="form-label" for="{{ f.title.id_for_label }}">{{ f.label }}</label> {{ f }}</p>
+                <div class="form-error">{{ f.errors }}</div>    
+            {% endfor %}
+            <button type="submit">Создать</button>
+        </form>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends 'base_generic.html' %}
+{% block title %}
+  <title>{{ title }}</title>
+{% endblock %}
+{% block content %}
+  <h1>{{title}}</h1>
+  {% for nom in nomenclature_list %}
+    <ul>
+        <li><a href="{{ nom.get_absolute_url }}">{{ nom }}</li>
+    </ul>
+  {% endfor %}
+{% endblock %}
