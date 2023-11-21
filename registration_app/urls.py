@@ -3,5 +3,6 @@ from django.urls import path
 
 
 urlpatterns = [
-    path('', views.register, name='register')
+    path('', views.register, name='register'),
+    path('edit/', views.edit, name='edit'),
 ]

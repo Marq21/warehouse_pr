@@ -23,7 +23,7 @@ class Profile(models.Model):
     photo = models.ImageField(upload_to='uploads',
                               blank=True)
     date_of_birth = models.DateField(blank=True, null=True)
-    date_of_start_working = models.DateField(blank=True, null=True)
+    start_working_date = models.DateField(blank=True, null=True)
 
     def __str__(self):
         return f'Profile of {self.user.username}'

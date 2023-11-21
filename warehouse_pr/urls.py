@@ -28,7 +28,7 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('catalog/', include('catalog.urls')),
     path('store_api/', include('store_api.urls')),
-    path('registration/', include('registration_app.urls')),
+    path('profiles/', include('registration_app.urls')),
 ]
 
 if settings.DEBUG:
