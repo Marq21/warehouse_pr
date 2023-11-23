@@ -30,8 +30,15 @@
     <input type="submit" value="Войти" />
     <input type="hidden" name="next" value="{{ next }}" />
   </form>
-  <a href="{% url 'auth' %}">Login by GitHub</a>
-  {# Assumes you setup the password_reset view in your URLconf #}
+  <p>
+    <a href="{% url 'auth' %}">Login by GitHub</a>
+    {# Assumes you setup the password_reset view in your URLconf #}
+  </p>
+  <p>
+    <a href="{% url 'social:begin' 'google-oauth2' %}">
+    Sign in with Google
+    </a>
+  </p>
   <p>
     <a href="{% url 'password_reset' %}">Lost password?</a>
   </p>

@@ -15,6 +15,3 @@ class NomenclatureViewSet(ModelViewSet):
     search_fields = ['name', 'barcode', 'slug']
     ordering_fields = ['name', 'cost']
 
-
-def auth(request):
-    return render(request, 'oauth.html')

@@ -6,9 +6,6 @@ router = SimpleRouter()
 
 router.register(r'nomenclature', views.NomenclatureViewSet)
 
-urlpatterns = [
-     path('', include('social_django.urls', namespace='social')),
-     path('auth/', views.auth, name='auth')
-]
+urlpatterns = []
 
 urlpatterns += router.urls

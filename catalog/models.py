@@ -61,12 +61,13 @@ class Nomenclature(models.Model):
                             db_index=True, verbose_name='URL')
     user = models.ForeignKey(
         User,
-        on_delete=models.SET_DEFAULT,
+        on_delete=models.DO_NOTHING,
         related_name='nomenclatures',
-        default="Anonymous")
+        null=True,
+        blank=True)
     category = models.ForeignKey(
         Category,
-        on_delete=models.SET_NULL,
+        on_delete=models.DO_NOTHING,
         related_name='nomenclatures',
         null=True,
         verbose_name='Категория'

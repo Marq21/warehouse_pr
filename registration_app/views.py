@@ -49,3 +49,8 @@ def edit(request):
                   'registration_app/edit.html',
                   {'user_form': user_form,
                    'profile_form': profile_form})
+
+
+
+def auth(request):
+    return render(request, 'registration_app/oauth.html')
