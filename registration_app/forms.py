@@ -36,7 +36,7 @@ class UserEditForm(forms.ModelForm):
         data = self.cleaned_data['email']
         qs = User.objects.exclude(id=self.instance.id).filter(email=data)
         if qs.exists():
-            raise forms.ValidationError(' Email already in use.')
+            raise forms.ValidationError('Email already in use.')
         return data
 
 

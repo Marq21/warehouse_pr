@@ -7,7 +7,11 @@
 {% block content %}
     <ul>
         {% for cat in cats %}
-            <li><a href="{{ cat.get_absolute_url }}"> {{cat.name}}</a></li>
+            <li>
+                <a href="{{ cat.get_absolute_url }}"> {{cat.name}}</a> 
+                <a class="list_category_change_btn" href="{% url 'edit-category' cat.id %}">| изменить </a>
+                <a href="{% url 'category-detail' cat.id %}">| детальнее </a>
+            </li>          
         {% endfor %}
     </ul>
     {% include "catalog/add_category_button_href.html" %}
