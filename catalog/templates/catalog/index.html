@@ -6,7 +6,7 @@
   <h1>{{title}}</h1>
   {% for nom in nomenclature_list %}
     <ul>
-        <li><a href="{{ nom.get_absolute_url }}">{{ nom }}</li>
+        <li><a href="{{ nom.get_absolute_url }}">{{ nom }}</li></a>
     </ul>
   {% endfor %}
 {% endblock %}

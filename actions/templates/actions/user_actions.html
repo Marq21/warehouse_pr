@@ -1,0 +1,10 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<h3>Последние дейтсвия работников</h3>
+<div id="action-list">
+    {% for action in actions %}
+        {% include "actions/actions_detail.html" %}
+    {% endfor %}
+</div
+{% endblock %}

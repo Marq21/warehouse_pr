@@ -1,17 +1,7 @@
 from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import User
-from django.template.defaultfilters import slugify as django_slugify
-
-
-def slugify(s):
-
-    alphabet = {'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd', 'е': 'e', 'ё': 'yo', 'ж': 'zh', 'з': 'z', 'и': 'i',
-                'й': 'j', 'к': 'k', 'л': 'l', 'м': 'm', 'н': 'n', 'о': 'o', 'п': 'p', 'р': 'r', 'с': 's', 'т': 't',
-                'у': 'u', 'ф': 'f', 'х': 'kh', 'ц': 'ts', 'ч': 'ch', 'ш': 'sh', 'щ': 'shch', 'ы': 'i', 'э': 'e', 'ю': 'yu',
-                'я': 'ya'}
-
-    return django_slugify(''.join(alphabet.get(w, w) for w in s.lower()))
+from .utils import slugify
 
 
 class Category(models.Model):

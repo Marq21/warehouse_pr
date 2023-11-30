@@ -29,6 +29,7 @@ urlpatterns = [
     path('catalog/', include('catalog.urls')),
     path('store_api/', include('store_api.urls')),
     path('profiles/', include('registration_app.urls')),
+    path('logs/', include('actions.urls'))
 ]
 
 if settings.DEBUG:

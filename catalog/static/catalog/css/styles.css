@@ -158,3 +158,13 @@ p.date {
 .list_category_change_btn {
   color: #000000 !important;
 }
+
+/* NOMENCLATURE ADD FORM */
+
+p.form-field {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+/* NOMENCLATURE ADD FORM */

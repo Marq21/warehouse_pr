@@ -10,6 +10,7 @@ from django.views.generic.edit import FormView, UpdateView
 from django.views.generic import TemplateView
 from django.core.mail import send_mail
 
+from actions.utils import create_action
 from .forms import AddNomenclatureForm, EmailNomenclatureForm,  AddCategoryForm, SearchForm
 from .models import Nomenclature, Category
 
@@ -53,7 +54,10 @@ class AddNomenclature(LoginRequiredMixin, FormView):
 
     def form_valid(self, form):
         form.instance.user = self.request.user
+        nom = form.save(commit=False)
         form.save()
+        create_action(self.request.user, 'Добавление номенклатуры', nom)
+        messages.success(self.request, 'Создание номенклатуры: успешно')
         return super(AddNomenclature, self).form_valid(form)
 
 
@@ -68,7 +72,11 @@ class EditNomenclature(LoginRequiredMixin, UpdateView):
     }
 
     def form_valid(self, form):
-        messages.success(self.request, 'Page updated successfully')
+        form.instance.user = self.request.user
+        nom = form.save(commit=False)
+        form.save()
+        create_action(self.request.user, 'Изменение номенклатуры', nom)
+        messages.success(self.request, 'Изменение номенклатуры: успешно')
         return super(EditNomenclature, self).form_valid(form)
 
     def form_invalid(self, form):
@@ -86,7 +94,8 @@ class EditCategory(LoginRequiredMixin, UpdateView):
     }
 
     def form_valid(self, form):
-        messages.success(self.request, 'Category updated successfully')
+        create_action(self.request.user, 'Изменение категории', self.request.category)
+        messages.success(self.request, 'Изменение категории: успешно')
         return super(EditCategory, self).form_valid(form)
 
     def form_invalid(self, form):
@@ -100,8 +109,9 @@ class AddCategory(LoginRequiredMixin, FormView):
     success_url = reverse_lazy('list-category')
 
     def form_valid(self, form):
-        messages.success(self.request, 'Successfully')
+        messages.success(self.request, 'Добавление категории: успешно')
         form.save()
+        create_action(self.request.user, 'Добавление категории', self.request.category)
         return super().form_valid(form)
 
 
