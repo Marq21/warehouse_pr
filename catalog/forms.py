@@ -1,6 +1,8 @@
 from django import forms
 from captcha.fields import CaptchaField
-from .models import Nomenclature, Category
+
+
+from .models import Nomenclature, Category, get_new_barcode
 
 
 class CaptchaTestForm(forms.Form):
@@ -10,11 +12,13 @@ class CaptchaTestForm(forms.Form):
 class AddNomenclatureForm(forms.ModelForm):
     user = forms.CharField(widget=forms.HiddenInput(),
                            required=False, label='')
+    barcode = forms.CharField(
+        initial=get_new_barcode())
 
     class Meta:
         model = Nomenclature
         fields = ['name', 'weight_or_piece',
-                  'cost', 'barcode', 'category',
+                  'cost', 'category',
                   'country_made',]
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-input'}),
