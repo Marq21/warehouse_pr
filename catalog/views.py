@@ -1,13 +1,16 @@
 from django.http import HttpResponseNotFound
 from django.shortcuts import get_object_or_404, render
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.postgres.search import TrigramSimilarity
+from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 from django.views import generic
 from django.views.generic.edit import FormView, UpdateView
 from django.views.generic import TemplateView
 from django.core.mail import send_mail
 
+from actions.utils import create_action
 from .forms import AddNomenclatureForm, EmailNomenclatureForm,  AddCategoryForm, SearchForm
 from .models import Nomenclature, Category
 
@@ -51,11 +54,14 @@ class AddNomenclature(LoginRequiredMixin, FormView):
 
     def form_valid(self, form):
         form.instance.user = self.request.user
+        nom = form.save(commit=False)
         form.save()
+        create_action(self.request.user, 'Добавление номенклатуры', nom)
+        messages.success(self.request, 'Создание номенклатуры: успешно')
         return super(AddNomenclature, self).form_valid(form)
 
 
-class EditPage(LoginRequiredMixin, UpdateView):
+class EditNomenclature(LoginRequiredMixin, UpdateView):
     model = Nomenclature
     fields = ['name', 'cost', 'weight_or_piece', 'barcode',
               'slug', 'user', 'category', 'country_made']
@@ -65,6 +71,37 @@ class EditPage(LoginRequiredMixin, UpdateView):
         'title': 'Изменение номенклатуры'
     }
 
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        nom = form.save(commit=False)
+        form.save()
+        create_action(self.request.user, 'Изменение номенклатуры', nom)
+        messages.success(self.request, 'Изменение номенклатуры: успешно')
+        return super(EditNomenclature, self).form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, 'Page update failed')
+        return super(EditNomenclature, self).form_valid(form)
+
+
+class EditCategory(LoginRequiredMixin, UpdateView):
+    model = Category
+    fields = ['name', 'slug',]
+    template_name = 'catalog/add_category.html'
+    success_url = reverse_lazy('list-category')
+    extra_context = {
+        'title': 'Изменение категории'
+    }
+
+    def form_valid(self, form):
+        create_action(self.request.user, 'Изменение категории', self.request.category)
+        messages.success(self.request, 'Изменение категории: успешно')
+        return super(EditCategory, self).form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, 'Category update failed')
+        return super(EditCategory, self).form_valid(form)
+
 
 class AddCategory(LoginRequiredMixin, FormView):
     form_class = AddCategoryForm
@@ -72,14 +109,21 @@ class AddCategory(LoginRequiredMixin, FormView):
     success_url = reverse_lazy('list-category')
 
     def form_valid(self, form):
+        messages.success(self.request, 'Добавление категории: успешно')
         form.save()
+        create_action(self.request.user, 'Добавление категории', self.request.category)
         return super().form_valid(form)
+
+
+class CategoryDetailView(LoginRequiredMixin, generic.DetailView):
+    model = Category
 
 
 class NomenclatureDetailView(LoginRequiredMixin, generic.DetailView):
     model = Nomenclature
 
 
+@login_required
 def show_category(request, cat_slug):
     category = get_object_or_404(Category, slug=cat_slug)
     nomenclatures = Nomenclature.objects.filter(category_id=category.pk)

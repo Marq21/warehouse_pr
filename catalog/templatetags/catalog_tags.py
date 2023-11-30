@@ -1,6 +1,5 @@
 from django import template
 import catalog.views as views
-from catalog.models import Category
 
 
 register = template.Library()
