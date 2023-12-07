@@ -84,15 +84,13 @@ class Nomenclature(models.Model):
         super().save(*args, **kwargs)
 
 
-def format_new_barcode(barcode, format_length):
+def get_barcode(barcode):
     parse_int = int(barcode) + 1
-    place_for_number = format_length - len(str(parse_int))
-    result = ''
-    for _ in range(place_for_number):
-        result += '0'
-    result += str(parse_int) 
-    return result 
+    place_for_number = len(str(parse_int))
+    result = ['0' for _ in range(11)]
+    result[-place_for_number:] = str(parse_int)
+    return ''.join(result)
 
 def get_new_barcode():
     barcode = Nomenclature.objects.latest('barcode').barcode
-    return format_new_barcode(barcode, len(barcode))
+    return get_barcode(barcode)

@@ -12,14 +12,12 @@ class CaptchaTestForm(forms.Form):
 class AddNomenclatureForm(forms.ModelForm):
     user = forms.CharField(widget=forms.HiddenInput(),
                            required=False, label='')
-    barcode = forms.CharField(
-        initial=get_new_barcode())
 
     class Meta:
         model = Nomenclature
         fields = ['name', 'weight_or_piece',
-                  'cost', 'category',
-                  'country_made',]
+                  'barcode', 'cost',
+                  'category', 'country_made',]
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-input'}),
         }
