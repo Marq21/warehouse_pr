@@ -12,7 +12,7 @@ from django.core.mail import send_mail
 
 from actions.utils import create_action
 from .forms import AddNomenclatureForm, EmailNomenclatureForm,  AddCategoryForm, SearchForm
-from .models import Nomenclature, Category
+from .models import Nomenclature, Category, get_new_barcode
 
 
 class NomenclatureHome(TemplateView):
@@ -51,6 +51,9 @@ class AddNomenclature(LoginRequiredMixin, FormView):
     extra_context = {
         'title': 'Добавление номенклатуры'
     }
+
+    def __init__(self, **kwargs):
+        self.initial = {'barcode': get_new_barcode()}
 
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -94,7 +97,11 @@ class EditCategory(LoginRequiredMixin, UpdateView):
     }
 
     def form_valid(self, form):
-        create_action(self.request.user, 'Изменение категории', self.request.category)
+        form.instance.user = self.request.user
+        category = form.save(commit=False)
+        form.save()
+        create_action(self.request.user, 'Изменение категории',
+                      category)
         messages.success(self.request, 'Изменение категории: успешно')
         return super(EditCategory, self).form_valid(form)
 
@@ -111,7 +118,8 @@ class AddCategory(LoginRequiredMixin, FormView):
     def form_valid(self, form):
         messages.success(self.request, 'Добавление категории: успешно')
         form.save()
-        create_action(self.request.user, 'Добавление категории', self.request.category)
+        create_action(self.request.user, 'Добавление категории',
+                      self.request.category)
         return super().form_valid(form)
 
 

@@ -9,3 +9,5 @@ def slugify(s):
                 'я': 'ya'}
 
     return django_slugify(''.join(alphabet.get(w, w) for w in s.lower()))
+
+         

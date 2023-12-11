@@ -50,6 +50,7 @@
 
           {% endblock %}
         </div>
+        <a href="{% url 'show-actions' %}"> Логи </a>
         {% block pagination %}
           {% if is_paginated %}
             <div class="pagination">

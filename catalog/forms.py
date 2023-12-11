@@ -1,6 +1,8 @@
 from django import forms
 from captcha.fields import CaptchaField
-from .models import Nomenclature, Category
+
+
+from .models import Nomenclature, Category, get_new_barcode
 
 
 class CaptchaTestForm(forms.Form):
@@ -14,8 +16,8 @@ class AddNomenclatureForm(forms.ModelForm):
     class Meta:
         model = Nomenclature
         fields = ['name', 'weight_or_piece',
-                  'cost', 'barcode', 'category',
-                  'country_made',]
+                  'barcode', 'cost',
+                  'category', 'country_made',]
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-input'}),
         }

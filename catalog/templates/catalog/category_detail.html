@@ -1,17 +1,16 @@
 {% extends 'base_generic.html' %}
 
 {% block content %}
-<div class="noms-detail">
+  <div class="noms-detail">
 
-  <p class="detail-nom-item">Наименование: {{ category.name }}</p>
-  <p class="detail-nom-item">Слаг: {{ category.slug }}</p>
+    <p class="detail-nom-item">Наименование: {{ category.name }}</p>
+    <p class="detail-nom-item">Слаг: {{ category.slug }}</p>
 
-  <br>
-  <p>
-    <a href="{% url 'edit-category' category.id %}">
-      Изменить
-    </a>
-  </p>
-</div>
-
+    <br>
+    <p>
+      <a href="{% url 'edit-category' category.id %}">
+        Изменить
+      </a>
+    </p>
+  </div>
 {% endblock %}

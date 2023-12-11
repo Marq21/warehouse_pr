@@ -70,7 +70,7 @@ class Nomenclature(models.Model):
 
     class Meta:
         ordering = ["name", "-cost"]
-        indexes = [models.Index(fields=["-cost"]), ]
+        indexes = [models.Index(fields=["-cost"]), models.Index(fields=["barcode"]), ]
         verbose_name_plural = "Nomenclatures"
 
     def __str__(self):
@@ -82,3 +82,15 @@ class Nomenclature(models.Model):
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
         super().save(*args, **kwargs)
+
+
+def get_barcode(barcode):
+    parse_int = int(barcode) + 1
+    place_for_number = len(str(parse_int))
+    result = ['0' for _ in range(11)]
+    result[-place_for_number:] = str(parse_int)
+    return ''.join(result)
+
+def get_new_barcode():
+    barcode = Nomenclature.objects.latest('barcode').barcode
+    return get_barcode(barcode)
