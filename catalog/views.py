@@ -97,8 +97,11 @@ class EditCategory(LoginRequiredMixin, UpdateView):
     }
 
     def form_valid(self, form):
+        form.instance.user = self.request.user
+        category = form.save(commit=False)
+        form.save()
         create_action(self.request.user, 'Изменение категории',
-                      self.request.category)
+                      category)
         messages.success(self.request, 'Изменение категории: успешно')
         return super(EditCategory, self).form_valid(form)
 
