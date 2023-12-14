@@ -5,9 +5,23 @@
 {% block content %}
     <h1>Изменение профиля</h1>
     <form method="post" enctype="multipart/form-data">
-        {{ user_form.as_p }}
-        {{ profile_form.as_p }}
+        {% comment %} {{ user_form.as_p }}
+        {{ profile_form.as_p }} {% endcomment %}
         {% csrf_token %}
+            <div class="form-error">{{ form.non_field_errors}}</div>
+            {% for f in user_form %}          
+                <p class="form-field">
+                        <label class="form-label" for="{{ f.title.id_for_label }}">{{ f.label }}</label> {{ f }}</p>
+                <div class="form-error">{{ f.errors }}</div>    
+            {% endfor %}
+            {% for f in profile_form %}          
+                <p {% if f.name == 'photo' %} class="form-field-photo" {% else %}  class="form-field" {% endif %}>
+                        <label class="form-label" for="{{ f.title.id_for_label }}">{{ f.label }}</label> {{ f }}</p>
+                        {% if f.name == 'photo' %} 
+                            <img src="{{ profile_form.instance.photo.url }}" alt='photo'>
+                        {% endif %}
+                <div class="form-error">{{ f.errors }}</div>    
+            {% endfor %}
         <p><input type="submit" value="Сохранить изменения"></p>
     </form>
 {% endblock %}

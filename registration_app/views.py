@@ -42,7 +42,7 @@ def edit(request):
             profile_form.save()
             create_action(request.user, 'изменил аккаунт')
             messages.success(request, 'профиль был обновлён'
-                             'успешно')
+                             ' успешно')
         else:
             messages.error(request, 'Error updating your profile')
     else:

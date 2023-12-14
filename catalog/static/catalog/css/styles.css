@@ -164,7 +164,14 @@ p.date {
 p.form-field {
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
+  width: 40%;
+}
+
+p.form-field-photo {
+  display: flex;
+  justify-content: space-between;
+  width: 40%;
+  flex-direction: column;
 }
 
 /* NOMENCLATURE ADD FORM */
