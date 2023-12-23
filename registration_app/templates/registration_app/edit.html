@@ -18,7 +18,7 @@
                 <p {% if f.name == 'photo' %} class="form-field-photo" {% else %}  class="form-field" {% endif %}>
                         <label class="form-label" for="{{ f.title.id_for_label }}">{{ f.label }}</label> {{ f }}</p>
                         {% if f.name == 'photo' %} 
-                            <img src="{{ profile_form.instance.photo.url }}" alt='photo'>
+                            <img class='profile_photo' src="{{ profile_form.instance.photo.url }}" alt='photo'>
                         {% endif %}
                 <div class="form-error">{{ f.errors }}</div>    
             {% endfor %}

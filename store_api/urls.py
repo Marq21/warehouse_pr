@@ -5,6 +5,7 @@ from store_api import views
 router = SimpleRouter()
 
 router.register(r'nomenclature', views.NomenclatureViewSet)
+router.register(r'category', views.CategoryViewSet)
 
 urlpatterns = []
 

@@ -2,7 +2,7 @@ from django import forms
 from captcha.fields import CaptchaField
 
 
-from .models import Nomenclature, Category, get_new_barcode
+from .models import Nomenclature, Category
 
 
 class CaptchaTestForm(forms.Form):
