@@ -13,7 +13,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
     <link rel="stylesheet" href="{% static 'catalog/css/styles.css' %}" />
   </head>
-
   <body>
     <div class="container-fluid">
       <div class="row">
@@ -68,8 +67,6 @@
         {% endblock %}
       </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" ></script>
     {% block include_js %}
       {{ request.user.username|json_script:"request-user" }}
     {% endblock %}
@@ -78,6 +75,8 @@
       {% block domready %}
       {% endblock %}
       })
-      </script>  
+    </script>  
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" ></script>
   </body>
 </html>
