@@ -1,7 +1,8 @@
 from typing import Any
+
 from django.contrib import admin
-from django.db.models.query import QuerySet
-from .models import Nomenclature, Category
+
+from .models import Category, Nomenclature
 
 
 @admin.register(Nomenclature)

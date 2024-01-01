@@ -11,7 +11,7 @@ class NomenclatureViewSet(ModelViewSet):
     serializer_class = NomenclatureSerializer
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ['weight_or_piece', 'category', 'user']
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
     search_fields = ['name', 'barcode', 'slug']
     ordering_fields = ['name', 'cost']
 
