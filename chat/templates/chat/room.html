@@ -15,22 +15,38 @@
 {% endblock %}
 
 {% block include_js %}
+    {{ request.user.username|json_script:"request-user" }}
 {% endblock %}
 
 {% block domready %}
+    const requestUser = JSON.parse(
+        document.getElementById('request-user').textContent
+    );
     const url = 'ws://' + window.location.host +
-        '/ws/chat/room/';
+    '/ws/chat/room/';
     const chatSocket = new WebSocket(url);
 
     chatSocket.onmessage = function(event) {
         const data = JSON.parse(event.data);
         const chat = document.getElementById('chat');
-        chat.innerHTML += '<div class="message">' + data.message + '</div>';
+
+        const dateOptions = {hour: 'numeric', minute: 'numeric', hour12: false};
+        const datetime = new Date(data.datetime).toLocaleString('ru', dateOptions);
+        const isMe = data.user === requestUser;
+        const source = isMe ? 'me' : 'other';
+        const name = isMe ? 'Me' : data.user;
+
+        chat.innerHTML += '<div class="message ' + source + '">' +
+            '<strong>' + name + '</strong> ' +
+            '<span class="date">' + datetime + '</span><br>' +
+            data.message + '</div>';
         chat.scrollTop = chat.scrollHeight;
     };
 
     chatSocket.onclose = function(event) {
         console.error('Chat socket closed unexpectedly')
+        console.error("WebSocket error: ", event);
+        console.error("WebSocket error: ", event.reason);
     }
 
     const input = document.getElementById('chat-message-input');
