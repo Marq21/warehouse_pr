@@ -21,7 +21,7 @@ class Profile(models.Model):
         help_text='Position',
         verbose_name='Должность')
     photo = models.ImageField(upload_to='uploads',
-                              blank=True)
+                              default='uploads/default_avatar.jpg')
     date_of_birth = models.DateField(blank=True, null=True)
     start_working_date = models.DateField(blank=True, null=True)
 
