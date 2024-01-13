@@ -31,6 +31,7 @@ urlpatterns = [
     path('profiles/', include('registration_app.urls')),
     path('logs/', include('actions.urls')),
     path('chat/', include('chat.urls', namespace='chat')),
+    path('inventory/', include('inventory.urls'))
 ]
 
 if settings.DEBUG:

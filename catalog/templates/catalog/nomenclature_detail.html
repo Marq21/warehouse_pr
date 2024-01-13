@@ -8,6 +8,7 @@
   <p class="detail-nom-item">Тип товара: {{ nomenclature.get_weight_or_piece_display }}</p>
   <p class="detail-nom-item">Штрих-код: {{ nomenclature.barcode }}</p>
   <p class="detail-nom-item">Категория: {{ nomenclature.category }}</p>
+  <p class="detail-nom-item">Страна изготовления: {{ nomenclature.country_made }}</p>
   <br>
   <p>
     <a href="{% url 'edit-nomenclature' nomenclature.id %}">

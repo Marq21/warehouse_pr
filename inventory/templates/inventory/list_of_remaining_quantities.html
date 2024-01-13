@@ -1,0 +1,22 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+    {% if quantity_list %}
+    <table class='nom-table'>
+        <tr>
+            <th>№</th>
+            <th>Название</th>
+            <th>Остаток</th>
+        </tr>
+        {% for item in quantity_list %}
+            <tr>
+                <td>{{forloop.counter}}</td> 
+                <td><a class="td-nomenclature" href="{{ item.nomenclature.get_absolute_url }}">{{ item.nomenclature.name }}</a></td>
+                <td>{{item.quantity}}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+    <p>Base is empty</p>
+    {% endif %}
+{% endblock %}

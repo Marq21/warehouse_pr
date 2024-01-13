@@ -2,11 +2,28 @@
 {% block content %}
     <h1>Список товаров</h1>
     {% if nomenclature_list %}
-    <ul>
+    <table class='nom-table'>
+      <tr>
+        <th>№</th>
+        <th>Название</th>
+        <th>Стоимость</th>
+        <th>Шт./Кг</th>
+        <th>Штрих-код</th>
+        <th>Категория</th>
+        <th>Страна изг.</th>
+      </tr>
       {% for nomenclature in nomenclature_list %}
-        <li><a href="{{ nomenclature.get_absolute_url }}">{{ nomenclature.name }} ({{nomenclature.cost}} &#8381)</li>
+          <tr>
+             <td>{{forloop.counter}}</td> 
+             <td><a class="td-nomenclature" href="{{ nomenclature.get_absolute_url }}">{{ nomenclature.name }}</a></td>
+             <td>{{nomenclature.cost}} &#8381</td>
+             <td>{% if nomenclature.weight_or_piece == "WT" %} Вес {% else %} Шт {% endif %}</td>
+             <td>{{nomenclature.barcode}}</td>
+             <td><a class="td-nomenclature" href="{{ nomenclature.category.get_absolute_url }}">{{nomenclature.category}}</a></td>
+             <td>{{nomenclature.country_made}}</td>      
+          </tr>
       {% endfor %}
-    </ul>
+    </table>
     {% else %}
       <p>Base is empty</p>
     {% endif %}

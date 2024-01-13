@@ -30,7 +30,6 @@ class NomenclatureHome(TemplateView):
 
 class NomenclatureListView(generic.ListView):
     model = Nomenclature
-    paginate_by = 10
     queryset = Nomenclature.objects.all()
     context_object_name = 'nomenclature_list'
     template_name = 'catalog/nomenclature-list.html'
@@ -38,7 +37,6 @@ class NomenclatureListView(generic.ListView):
 
 class CategoryListView(generic.ListView):
     model = Category
-    paginate_by = 10
     queryset = Category.objects.all()
     context_object_name = 'cats'
     template_name = 'catalog/list-category.html'

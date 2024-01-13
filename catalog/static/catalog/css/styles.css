@@ -243,3 +243,21 @@ p.form-field-photo {
 
 
 /* CHAT */
+
+/* NOMENCLATURE-LIST TABLE */
+
+table, th, td {
+  border: 1px solid black;
+  margin: 5px;
+  padding: 5px;
+}
+
+a.td-nomenclature {
+  text-decoration: none;
+  color: black;
+}
+
+a.td-nomenclature:hover {
+  text-decoration: underline;
+  color: rgba(0, 0, 0, 0.158);
+}

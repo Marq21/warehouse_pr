@@ -28,6 +28,15 @@
               <li><a class="dropdown-item" href="{% url 'list-category' %}">Список категорий</a></li>
             </ul>
           </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="{% url 'nomenclature-list-view' %}" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Инвентаризация
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="{% url 'list_of_quantity' %}">Остатки</a></li>
+              <li><a class="dropdown-item" href="#">Задания на пересчёт</a></li>
+            </ul>
+          </li>
         </ul>
       </div>
     </div>
