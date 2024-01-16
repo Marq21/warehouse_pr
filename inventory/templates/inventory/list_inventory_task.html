@@ -1,0 +1,23 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+    {% if inventory_task_list %}
+    <table class='nom-table'>
+        <tr>
+            <th>№</th>
+            <th>Название инвентаризации</th>
+            <th>Дата создания</th>
+        </tr>
+        {% for task in inventory_task_list %}
+            <tr>
+                <td>{{forloop.counter}}</td> 
+                <td><a class="td-nomenclature" href="{{ task.get_absolute_url }}">{{ task.name }}</a></td>
+                <td>{{task.created|date:'d-m-Y H:i'}}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+    <p>Base is empty</p>
+    {% endif %}
+    <a href="{% url 'create-inventory-task' %}"> Создать задание на пересчёт </a>
+{% endblock %}

@@ -29,12 +29,12 @@
             </ul>
           </li>
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="{% url 'nomenclature-list-view' %}" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               Инвентаризация
             </a>
             <ul class="dropdown-menu">
               <li><a class="dropdown-item" href="{% url 'list_of_quantity' %}">Остатки</a></li>
-              <li><a class="dropdown-item" href="#">Задания на пересчёт</a></li>
+              <li><a class="dropdown-item" href="{% url 'list-inventory-task' %}">Задания на пересчёт</a></li>
             </ul>
           </li>
         </ul>

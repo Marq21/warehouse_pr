@@ -4,4 +4,8 @@ from . import views
 
 urlpatterns = [
     path('list_of_quantity/', views.show_list_of_quantity, name='list_of_quantity'),
+    path('create_inventory_task/', views.CreateInventoryTask.as_view(),
+         name='create-inventory-task'),
+    path('list_inventory_task/', views.InventoryTaskListView.as_view(),
+        name='list-inventory-task'),
 ]
