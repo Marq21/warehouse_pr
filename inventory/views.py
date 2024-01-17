@@ -7,7 +7,8 @@ from django.contrib import messages
 from django.views import generic
 
 from inventory.forms import CreateInventoryTaskForm
-from .models import InventoryTask, NomenclatureRemain
+from catalog.models import Category, Nomenclature
+from .models import InventoryItem, InventoryTask, NomenclatureRemain
 from actions.utils import create_action
 
 
@@ -30,6 +31,12 @@ class CreateInventoryTask(LoginRequiredMixin, FormView):
     def form_valid(self, form):
         form.instance.user = self.request.user
         inventory_task = form.save(commit=False)
+        category = inventory_task.category
+        nomenclature_list = Nomenclature.objects.filter(category=category)
+        for nom in nomenclature_list:
+            temp_item = InventoryItem.objects.create(nomenclature=nom, inventory_task=inventory_task)
+            inventory_task.inventory_item.add(temp_item)  
+            temp_item.save()
         form.save()
         create_action(self.request.user, 'Задание на пересчёт', inventory_task)
         messages.success(self.request, 'Задание на пересчёт создано успешно')
@@ -41,3 +48,14 @@ class InventoryTaskListView(generic.ListView):
     queryset = InventoryTask.objects.all()
     context_object_name = 'inventory_task_list'
     template_name = 'inventory/list_inventory_task.html'
+
+
+def inventory_task_detail(request, id :int):
+    inventory_task = InventoryTask.objects.get(pk=id)
+    inventory_item_list = InventoryItem.objects.filter(inventory_task=inventory_task)
+    data = {
+        'title': f'Задание на пересчёт: {inventory_task}', 
+        'inventory_item_list': inventory_item_list
+    }
+    return render(request, 'inventory/inventory_task_detail.html', data)
+

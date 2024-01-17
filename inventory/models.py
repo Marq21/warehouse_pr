@@ -1,5 +1,6 @@
 from datetime import datetime
 from django.db import models
+from django.urls import reverse
 from catalog.utils import slugify
 from catalog.models import Nomenclature
 
@@ -29,6 +30,12 @@ class NomenclatureRemain(models.Model):
 
 
 class InventoryTask(models.Model):
+
+    class InventoryStatus(models.TextChoices):
+        FORMED = 'F', 'Формиурется'
+        IN_PROGRESS = 'IP', 'В работе'
+        DONE = 'D', 'Завершено'
+
     name = models.CharField(max_length=200)
     created = models.DateTimeField(
         auto_now_add=True,)
@@ -37,11 +44,21 @@ class InventoryTask(models.Model):
         on_delete=models.CASCADE,
         related_name='inventory_task',
         null=True)
+    status = models.CharField(
+        max_length=2,
+        choices=InventoryStatus.choices,
+        blank=True,
+        default=InventoryStatus.FORMED,
+        help_text='Статус инвентаризации',
+        verbose_name='InventoryStatus')
 
     class Meta:
         ordering = ["name"]
         verbose_name = "InventoryTask"
         verbose_name_plural = "InventoryTasks"
+
+    def get_absolute_url(self):
+        return reverse('inventory-task-detail', kwargs={'id': self.id})
 
     def __str__(self):
         return f'{self.name}'
@@ -73,3 +90,6 @@ class InventoryItem(models.Model):
     def save(self, *args, **kwargs):
         self.name = f'Inventory-object-{Nomenclature.objects.get(id=self.nomenclature.id).slug}-{datetime.now()}'
         super().save(*args, **kwargs)
+    
+    def get_absolute_url(self):
+        return reverse('list_of_quantity')
