@@ -33,10 +33,12 @@ class CreateInventoryTask(LoginRequiredMixin, FormView):
         inventory_task = form.save(commit=False)
         category = inventory_task.category
         nomenclature_list = Nomenclature.objects.filter(category=category)
+        inventory_item_list = []
+        inventory_task.save()
         for nom in nomenclature_list:
-            temp_item = InventoryItem.objects.create(nomenclature=nom, inventory_task=inventory_task)
-            inventory_task.inventory_item.add(temp_item)  
-            temp_item.save()
+            inventory_item_list.append(InventoryItem(
+                name=f'{nom.name}--{inventory_task.id}', nomenclature=nom, inventory_task=inventory_task))
+        InventoryItem.objects.bulk_create(inventory_item_list)
         form.save()
         create_action(self.request.user, 'Задание на пересчёт', inventory_task)
         messages.success(self.request, 'Задание на пересчёт создано успешно')
@@ -50,12 +52,12 @@ class InventoryTaskListView(generic.ListView):
     template_name = 'inventory/list_inventory_task.html'
 
 
-def inventory_task_detail(request, id :int):
+def inventory_task_detail(request, id: int):
     inventory_task = InventoryTask.objects.get(pk=id)
-    inventory_item_list = InventoryItem.objects.filter(inventory_task=inventory_task)
+    inventory_item_list = InventoryItem.objects.filter(
+        inventory_task=inventory_task)
     data = {
-        'title': f'Задание на пересчёт: {inventory_task}', 
+        'title': f'Задание на пересчёт: {inventory_task} №{inventory_task.id} ',
         'inventory_item_list': inventory_item_list
     }
     return render(request, 'inventory/inventory_task_detail.html', data)
-

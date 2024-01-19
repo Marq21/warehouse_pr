@@ -6,6 +6,7 @@
  
 {% block content %}
     {% if inventory_item_list %}
+    <h3> {{title}} </h3>
     <table class='nom-table'>
         <tr>
             <th>№</th>
@@ -18,7 +19,7 @@
                 <td>{{forloop.counter}}</td> 
                 <td><a class="td-nomenclature" href="{{ item.get_absolute_url }}">{{ item.name }}</a></td>
                 <td>{{item.current_quantity}}</td>
-                <td>{{item.inventory_item}}</td>
+                <td>{{item.inventory_task}}</td>
             </tr>
         {% endfor %}
     </table>
