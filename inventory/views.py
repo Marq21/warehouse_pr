@@ -58,6 +58,7 @@ def inventory_task_detail(request, id: int):
         inventory_task=inventory_task)
     data = {
         'title': f'Задание на пересчёт: {inventory_task} №{inventory_task.id} ',
-        'inventory_item_list': inventory_item_list
+        'inventory_item_list': inventory_item_list,
+        'task': inventory_task,
     }
     return render(request, 'inventory/inventory_task_detail.html', data)
