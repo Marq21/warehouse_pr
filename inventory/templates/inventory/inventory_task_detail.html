@@ -6,25 +6,39 @@
  
 {% block content %}
     {% if inventory_item_list %}
-    <h3> {{title}} </h3>
+        {% if task.status != 'F'%}
+            <div class='container'>
+                <form class='input-barcode' action = "" method = "post">
+                    {% csrf_token %}
+                    {{ form }}
+                    <input type="submit" value="Ввод">
+                </form>
+            </div>
+        {% else %}
+            <div class='container'>
+                <form class='update-status' action = "" method = "post">
+                    {% csrf_token %}
+                    {{ form }}
+                    <input type="submit" value="Подтвердить">
+                </form>
+            </div>
+        {% endif %}
+    <h3> {{ title }} </h3>
     <table class='nom-table'>
         <tr>
             <th>№</th>
             <th>Название номенклатуры</th>
-            <th>Текущее количество</th>
-            <th>Название задания</th>
+            <th>Количество</th>
         </tr>
         {% for item in inventory_item_list %}
             <tr>
                 <td>{{forloop.counter}}</td> 
                 <td><a class="td-nomenclature" href="{{ item.get_absolute_url }}">{{ item.name }}</a></td>
                 <td>{{item.current_quantity}}</td>
-                <td>{{task}}</td>
             </tr>
         {% endfor %}
     </table>
     {% else %}
-    <p>Нет товаров на пересчёт</p>
+        <p>Нет товаров на пересчёт</p>
     {% endif %}
-    <a href="{% url 'create-inventory-task' %}"> Создать задание на пересчёт </a>
 {% endblock %}

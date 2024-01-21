@@ -7,17 +7,25 @@
             <th>№</th>
             <th>Название инвентаризации</th>
             <th>Дата создания</th>
+            <th>Статус</th>
         </tr>
         {% for task in inventory_task_list %}
             <tr>
                 <td>{{forloop.counter}}</td> 
                 <td><a class="td-nomenclature" href="{{ task.get_absolute_url }}">{{ task.name }}</a></td>
                 <td>{{task.created|date:'d-m-Y H:i'}}</td>
+                {% if task.status == 'F' %}
+                    <td style='color: red'>{{task.get_status_display}}</td>
+                {% elif task.status == 'IP' %}
+                    <td style='color: orange'>{{task.get_status_display}}</td>
+                {% elif task.status == 'D' %}
+                    <td style='color: green'>{{task.get_status_display}}</td>
+                {% endif %}
             </tr>
         {% endfor %}
     </table>
     {% else %}
-    <p>Base is empty</p>
+        <p>Base is empty</p>
     {% endif %}
-    <a href="{% url 'create-inventory-task' %}"> Создать задание на пересчёт </a>
+        <a href="{% url 'create-inventory-task' %}"> Создать задание на пересчёт </a>
 {% endblock %}

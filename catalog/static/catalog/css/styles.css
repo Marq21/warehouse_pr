@@ -67,7 +67,7 @@ h2 {
 
 #content {
   width: 60%;
-  padding: 0 0 0 3px;
+  padding: 5px 0 0 3px;
 }
 
 /* SIDEBAR */
@@ -250,6 +250,10 @@ table, th, td {
   border: 1px solid black;
   margin: 5px;
   padding: 5px;
+}
+
+.nom-table {
+  background: paleturquoise;
 }
 
 a.td-nomenclature {

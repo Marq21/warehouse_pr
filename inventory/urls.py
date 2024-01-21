@@ -7,7 +7,7 @@ urlpatterns = [
     path('create_inventory_task/', views.CreateInventoryTask.as_view(),
          name='create-inventory-task'),
     path('list_inventory_task/', views.InventoryTaskListView.as_view(),
-        name='list-inventory-task'),
-    path('inventory_task_detail/<int:id>', views.inventory_task_detail, 
+         name='list-inventory-task'),
+    path('inventory_task_detail/<int:id>', views.inventory_task_detail,
          name='inventory-task-detail'),
 ]
