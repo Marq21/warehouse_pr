@@ -1,4 +1,4 @@
-from warehouse_pr.catalog.models import Nomenclature
+from warehouse_pr.catalog.models import Category, Nomenclature
 from warehouse_pr.inventory.models import NomenclatureRemain
 
 

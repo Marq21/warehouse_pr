@@ -265,3 +265,12 @@ a.td-nomenclature:hover {
   text-decoration: underline;
   color: rgba(0, 0, 0, 0.158);
 }
+
+/* ERROR MESSAGES */
+.error {
+  color: red;
+}
+
+ul.messages {
+  width: fit-content;
+}

@@ -58,7 +58,7 @@ class InventoryTask(models.Model):
         verbose_name_plural = "InventoryTasks"
 
     def get_absolute_url(self):
-        return reverse('inventory-task-detail', kwargs={'id': self.id})
+        return reverse('inventory-task-detail', kwargs={'pk': self.pk})
 
     def __str__(self):
         return f'{self.name}'
@@ -71,7 +71,8 @@ class InventoryItem(models.Model):
         on_delete=models.CASCADE,
         related_name='inventory_item',
     )
-    current_quantity = models.IntegerField(default=0, blank=True)
+    current_quantity = models.FloatField(
+        default=0, blank=True, verbose_name='Количество', help_text='Введите количество товара')
     inventory_task = models.ForeignKey(
         'InventoryTask',
         on_delete=models.CASCADE,
@@ -90,6 +91,6 @@ class InventoryItem(models.Model):
     def save(self, *args, **kwargs):
         self.name = f'Inventory-object-{Nomenclature.objects.get(id=self.nomenclature.id).slug}-{datetime.now()}'
         super().save(*args, **kwargs)
-    
+
     def get_absolute_url(self):
-        return reverse('list_of_quantity')
+        return reverse('inventory-item-update', kwargs={"pk": self.pk})

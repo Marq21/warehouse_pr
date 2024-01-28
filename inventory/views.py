@@ -1,10 +1,12 @@
-from django.shortcuts import render
+from typing import Any
+from django.shortcuts import redirect, render
 
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.urls import reverse_lazy
-from django.views.generic.edit import FormView
+from django.urls import reverse, reverse_lazy
+from django.views.generic.edit import UpdateView, FormView
 from django.contrib import messages
 from django.views import generic
+from django.contrib.auth.decorators import login_required
 
 from .forms import CreateInventoryTaskForm, InputBarcode, UpdateStatus
 from catalog.models import Nomenclature
@@ -12,6 +14,7 @@ from .models import InventoryItem, InventoryTask, NomenclatureRemain
 from actions.utils import create_action
 
 
+@login_required
 def show_list_of_quantity(request):
 
     quantity = NomenclatureRemain.objects.all()
@@ -42,7 +45,7 @@ class CreateInventoryTask(LoginRequiredMixin, FormView):
         for nom in nomenclature_list:
             inventory_item_list.append(InventoryItem(
                 name=f'{nom.name}--{inventory_task.id}', nomenclature=nom, inventory_task=inventory_task))
-            
+
         InventoryItem.objects.bulk_create(inventory_item_list)
         form.save()
         create_action(self.request.user, 'Задание на пересчёт', inventory_task)
@@ -51,7 +54,7 @@ class CreateInventoryTask(LoginRequiredMixin, FormView):
         return super(CreateInventoryTask, self).form_valid(form)
 
 
-class InventoryTaskListView(generic.ListView):
+class InventoryTaskListView(LoginRequiredMixin, generic.ListView):
 
     model = InventoryTask
     queryset = InventoryTask.objects.all()
@@ -59,9 +62,9 @@ class InventoryTaskListView(generic.ListView):
     template_name = 'inventory/list_inventory_task.html'
 
 
-def inventory_task_detail(request, id: int):
+def inventory_task_detail(request, pk: int):
 
-    inventory_task = InventoryTask.objects.get(pk=id)
+    inventory_task = InventoryTask.objects.get(pk=pk)
     inventory_item_list = InventoryItem.objects.filter(
         inventory_task=inventory_task)
 
@@ -70,7 +73,7 @@ def inventory_task_detail(request, id: int):
         form = update_form
 
         if update_form.is_valid():
-            updating_task = InventoryTask.objects.get(id=inventory_task.id)
+            updating_task = InventoryTask.objects.get(id=inventory_task.pk)
             updating_task.status = 'IP'
             updating_task.save()
 
@@ -80,8 +83,15 @@ def inventory_task_detail(request, id: int):
 
         if form.is_valid():
             barcode = request.POST.get('barcode_input')
-            print(barcode)           
-
+            category = inventory_task.category
+            print(barcode)
+            print(category)
+            nom = Nomenclature.objects.get(barcode=barcode)
+            print(nom.category == category)
+            if nom.category == category:
+                return redirect('inventory-item-update', pk=inventory_task.pk, permanent=True)
+            else:
+                messages.error(request, 'Товар не соответсвует категории!')
 
     elif inventory_task.status == 'F':
         update_form = UpdateStatus()
@@ -99,3 +109,26 @@ def inventory_task_detail(request, id: int):
     }
 
     return render(request, 'inventory/inventory_task_detail.html', data)
+
+
+class InventoryItemUpdateView(LoginRequiredMixin, UpdateView):
+    model = InventoryItem
+    fields = ['current_quantity']
+    template_name = 'inventory/inventory_item_update_form.html'
+    extra_context = {
+        'title': 'Пересчёт товара'
+    }
+
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        context = super(InventoryItemUpdateView,
+                        self).get_context_data(**kwargs)
+        name = context['object'].nomenclature.name
+        context['name'] = name
+        return context
+
+    def form_valid(self, form):
+        return form.save()
+
+    def get_success_url(self):
+        view_name = 'inventory_task_detail'
+        return reverse(view_name, kwargs={'model_name_slug': self.object.slug})

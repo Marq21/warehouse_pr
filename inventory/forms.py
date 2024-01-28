@@ -1,7 +1,7 @@
 from django import forms
 
 from catalog.models import Category, Nomenclature
-from inventory.models import InventoryTask
+from inventory.models import InventoryItem, InventoryTask
 
 
 class CreateInventoryTaskForm(forms.ModelForm):
