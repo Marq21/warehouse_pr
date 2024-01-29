@@ -120,15 +120,13 @@ class InventoryItemUpdateView(LoginRequiredMixin, UpdateView):
     }
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
-        context = super(InventoryItemUpdateView,
-                        self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         name = context['object'].nomenclature.name
         context['name'] = name
         return context
 
-    def form_valid(self, form):
-        return form.save()
+    # def form_valid(self, form):
+    #     return form.save()
 
     def get_success_url(self):
-        view_name = 'inventory_task_detail'
-        return reverse(view_name, kwargs={'model_name_slug': self.object.slug})
+        return reverse_lazy('inventory-task-detail', args=[self.object.inventory_task.pk])

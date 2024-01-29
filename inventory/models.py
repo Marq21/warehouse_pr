@@ -89,7 +89,7 @@ class InventoryItem(models.Model):
         return f'{self.name}'
 
     def save(self, *args, **kwargs):
-        self.name = f'Inventory-object-{Nomenclature.objects.get(id=self.nomenclature.id).slug}-{datetime.now()}'
+        self.name = f'{Nomenclature.objects.get(id=self.nomenclature.id).name}-{datetime.now()}-{self.inventory_task.pk}'
         super().save(*args, **kwargs)
 
     def get_absolute_url(self):
