@@ -1,0 +1,42 @@
+{% extends 'base_generic.html' %}
+{% load django_template_maths %}
+
+{% block title %}
+      <title>{{title}}</title>
+{% endblock %}
+ 
+{% block content %}
+    <h3> {{ title }} </h3>
+    <table class='nom-table'>
+        <tr>
+            <th>№</th>
+            <th>Название номенклатуры</th>
+            <th>Текущее количество</td>
+            <th>Расхождения</th>
+            <th>Количество в базе</th>
+        </tr>
+        {% for confirm_item in compared_confirm_list %}
+            <tr>
+                <td>{{forloop.counter}}</td> 
+                <td>{{confirm_item.0.name }}</td>
+                <td>{{confirm_item.0.current_quantity}}</td>
+                <td>{% if confirm_item.1.quantity == 0 %} 
+                        0 
+                    {% else %}
+                    {{confirm_item.0.current_quantity|sub:confirm_item.1.quantity}}
+                    {% endif %}
+                </td>
+                <td>{{confirm_item.1.quantity}}</td>
+            </tr>
+        {% empty %}
+            <p>Нет товаров на пересчёт</p>   
+        {% endfor %} 
+        {% for number in numbers %}
+            <p>{{number}}</p>
+        {% endfor %}      
+    </table>
+    <form class='accept-task' action = "/inventory/accept_task/{{task.id}}" method = "POST">
+        {% csrf_token %}
+        <input type="submit" value="Подтвердить">
+    </form>
+{% endblock %}

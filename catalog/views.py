@@ -114,11 +114,14 @@ class AddCategory(LoginRequiredMixin, FormView):
     success_url = reverse_lazy('list-category')
 
     def form_valid(self, form):
-        messages.success(self.request, 'Добавление категории: успешно')
+        form.instance.user = self.request.user
+        category = form.save(commit=False)
         form.save()
         create_action(self.request.user, 'Добавление категории',
-                      self.request.category)
-        return super().form_valid(form)
+                      category)
+        messages.success(self.request, 'Добавление категории: успешно')
+        return super(AddCategory, self).form_valid(form)
+
 
 
 class CategoryDetailView(LoginRequiredMixin, generic.DetailView):

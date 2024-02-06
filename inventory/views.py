@@ -62,6 +62,38 @@ class InventoryTaskListView(LoginRequiredMixin, generic.ListView):
     template_name = 'inventory/list_inventory_task.html'
 
 
+@login_required
+def inventory_task_confirm(request, pk: int):
+    
+    data_context = {}
+    inventory_task = InventoryTask.objects.get(pk=pk)
+    inventory_item_list = InventoryItem.objects.filter(
+        inventory_task=inventory_task)
+    confirm_task_list = []
+
+    for item in inventory_item_list:
+        if NomenclatureRemain.objects.filter(
+                nomenclature=item.nomenclature).exists():
+            confirm_task_list.append(NomenclatureRemain.objects.get(
+                nomenclature=item.nomenclature))
+
+        else:      
+            confirm_task_list.append(NomenclatureRemain.objects.create(
+                nomenclature=item.nomenclature))
+    
+    compared_confirm_list = zip(inventory_item_list, confirm_task_list)
+    print(compared_confirm_list)
+
+    data_context = {
+        'inventory_task': inventory_task,
+        'compared_confirm_list': compared_confirm_list
+    }
+
+
+    return render(request, "inventory/inventory_task_confirm.html", data_context)
+
+
+@login_required
 def inventory_task_detail(request, pk: int):
 
     inventory_task = InventoryTask.objects.get(pk=pk)
@@ -84,10 +116,7 @@ def inventory_task_detail(request, pk: int):
         if form.is_valid():
             barcode = request.POST.get('barcode_input')
             category = inventory_task.category
-            print(barcode)
-            print(category)
             nom = Nomenclature.objects.get(barcode=barcode)
-            print(nom.category == category)
             if nom.category == category:
                 return redirect('inventory-item-update', pk=inventory_task.pk, permanent=True)
             else:
@@ -124,9 +153,6 @@ class InventoryItemUpdateView(LoginRequiredMixin, UpdateView):
         name = context['object'].nomenclature.name
         context['name'] = name
         return context
-
-    # def form_valid(self, form):
-    #     return form.save()
 
     def get_success_url(self):
         return reverse_lazy('inventory-task-detail', args=[self.object.inventory_task.pk])
