@@ -12,7 +12,7 @@
             <tr>
                 <td>{{forloop.counter}}</td> 
                 <td><a class="td-nomenclature" href="{{ item.nomenclature.get_absolute_url }}">{{ item.nomenclature.name }}</a></td>
-                <td>{{item.quantity}}</td>
+                <td>{{item.quantity|floatformat}}</td>
             </tr>
         {% endfor %}
     </table>

@@ -66,7 +66,7 @@ class InventoryTask(models.Model):
 
 class InventoryItem(models.Model):
     name = models.CharField(max_length=200, blank=True)
-    nomenclature = models.OneToOneField(
+    nomenclature = models.ForeignKey(
         'catalog.Nomenclature',
         on_delete=models.CASCADE,
         related_name='inventory_item',

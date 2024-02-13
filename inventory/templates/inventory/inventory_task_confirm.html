@@ -19,14 +19,14 @@
             <tr>
                 <td>{{forloop.counter}}</td> 
                 <td>{{confirm_item.0.name }}</td>
-                <td>{{confirm_item.0.current_quantity}}</td>
+                <td>{{confirm_item.0.current_quantity|floatformat}}</td>
                 <td>{% if confirm_item.1.quantity == 0 %} 
                         0 
                     {% else %}
-                    {{confirm_item.0.current_quantity|sub:confirm_item.1.quantity}}
+                        {{confirm_item.0.current_quantity|sub:confirm_item.1.quantity|floatformat}}
                     {% endif %}
                 </td>
-                <td>{{confirm_item.1.quantity}}</td>
+                <td>{{confirm_item.1.quantity|floatformat}}</td>
             </tr>
         {% empty %}
             <p>Нет товаров на пересчёт</p>   

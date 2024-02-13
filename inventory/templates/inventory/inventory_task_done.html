@@ -17,7 +17,7 @@
             <tr>
                 <td>{{forloop.counter}}</td> 
                 <td>{{item.name }}</td>
-                <td>{{item.quantity}}</td>
+                <td>{{item.quantity|floatformat}}</td>
             </tr>
         {% empty %}
             <p>В задании не было товаров на пересчёт</p>   
