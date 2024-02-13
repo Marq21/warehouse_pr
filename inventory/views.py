@@ -83,13 +83,17 @@ def inventory_task_confirm(request, pk: int):
 
 @login_required
 def inventory_task_done(request, pk: int):
+
     inventory_task = InventoryTask.objects.get(pk=pk)
     inventory_item_list = get_inventory_item_list(pk)
     nomenclature_remain_list = get_nomenclature_remain_list(
         inventory_item_list)
-    inventory_task.status = InventoryTask.InventoryStatus.DONE
-    inventory_task.save()
-    update_remains(inventory_item_list, nomenclature_remain_list)
+    
+    if request.method == 'POST':
+        inventory_task.status = InventoryTask.InventoryStatus.DONE
+        inventory_task.save()
+        update_remains(inventory_item_list, nomenclature_remain_list)
+        
     context_data = {
         'title': f'Задание № {inventory_task.pk} завершено',
         'inventory_task': inventory_task,
