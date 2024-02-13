@@ -186,6 +186,11 @@ p.form-field-photo {
 
 /* CHAT */
 
+.chat {
+  display: block;
+  width: fit-content;
+}
+
 #chat {
     top: 64px;
     bottom:0;
@@ -243,6 +248,15 @@ p.form-field-photo {
 
 
 /* CHAT */
+
+/* LOGS/ACTIONS */
+
+.logs {
+  display: block;
+  width: fit-content;
+}
+
+/* LOGS/ACTIONS */
 
 /* NOMENCLATURE-LIST TABLE */
 

@@ -14,9 +14,5 @@ class NomenclatureListViewTest(TestCase):
                                         cost=10 + nomenclature_num,)
 
     def test_view_url_exists_at_desired_location(self):
-        resp = self.client.get(reverse('catalog/nomenclature_list'))
-        self.assertEqual(resp.status_code, 200)
-
-    def test_view_url_accessible_by_name(self):
-        resp = self.client.get(reverse('nomenclature'))
+        resp = self.client.get(reverse('nomenclature-list-view'))
         self.assertEqual(resp.status_code, 200)
