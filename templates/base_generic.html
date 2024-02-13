@@ -21,7 +21,7 @@
           {% block sidebar %}
             <ul class="sidebar-nav">
               <li>
-                <a href="{% url 'index' %}">Home</a>
+                <a href="{% url 'home' %}">Home</a>
               </li>
               {% if user.is_authenticated %}
                 <li class="login-user">User: {{ user.get_username }}</li>
@@ -48,8 +48,12 @@
 
           {% endblock %}
         </div>
-        <a href="{% url 'chat:chat-room' %}"> Чат </a>
-        <a href="{% url 'show-actions' %}"> Логи </a>
+        <div class='chat'>
+          <a href="{% url 'chat:chat-room' %}"> Чат </a>
+        </div>
+        <div class='logs'>
+          <a href="{% url 'show-actions' %}"> Логи </a>
+        </div>
         {% block pagination %}
         {% endblock %}
       </div>

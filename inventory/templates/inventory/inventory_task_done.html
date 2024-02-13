@@ -1,0 +1,31 @@
+{% extends 'base_generic.html' %}
+{% load django_template_maths %}
+
+{% block title %}
+      <title>{{title}}</title>
+{% endblock %}
+ 
+{% block content %}
+    <h3> {{ title }} </h3>
+    <table class='nom-table'>
+        <tr>
+            <th>№</th>
+            <th>Название номенклатуры</th>
+            <th>Количество</td>
+        </tr>
+        {% for item in nomenclature_remain_list %}
+            <tr>
+                <td>{{forloop.counter}}</td> 
+                <td>{{item.name }}</td>
+                <td>{{item.quantity}}</td>
+            </tr>
+        {% empty %}
+            <p>В задании не было товаров на пересчёт</p>   
+        {% endfor %}      
+    </table>
+    <div class='navigate_inv_done'>
+        <a href="{% url 'home' %}"> На главную </a> 
+        <a href="{% url 'list-inventory-task' %}"> К списку заданий </a>
+        <a href="{% url 'list_of_quantity' %}"> Остатки на складе </a> 
+    </div>
+{% endblock %}

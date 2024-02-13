@@ -12,7 +12,7 @@ class NomenclatureRemain(models.Model):
         on_delete=models.CASCADE,
         related_name='nomenclature_remain',
     )
-    quantity = models.IntegerField(default=0, blank=True)
+    quantity = models.FloatField(default=0, blank=True)
     slug = models.SlugField(max_length=255, unique=True, db_index=True)
 
     class Meta:

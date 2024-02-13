@@ -14,4 +14,6 @@ urlpatterns = [
          name='list-inventory-task'),
     path('accept_task/confirm/<int:pk>', views.inventory_task_confirm,
          name='accept_task_confirm'),
+    path('accept_task/done/<int:pk>',
+         views.inventory_task_done, name='inventory_task_done')
 ]

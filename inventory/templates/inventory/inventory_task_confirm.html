@@ -30,12 +30,9 @@
             </tr>
         {% empty %}
             <p>Нет товаров на пересчёт</p>   
-        {% endfor %} 
-        {% for number in numbers %}
-            <p>{{number}}</p>
-        {% endfor %}      
+        {% endfor %}       
     </table>
-    <form class='accept-task' action = "/inventory/accept_task/{{task.id}}" method = "POST">
+    <form class='accept-task' action = "/inventory/accept_task/done/{{task_id}}" method = "POST">
         {% csrf_token %}
         <input type="submit" value="Подтвердить">
     </form>

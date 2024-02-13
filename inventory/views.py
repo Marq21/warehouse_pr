@@ -8,6 +8,8 @@ from django.contrib import messages
 from django.views import generic
 from django.contrib.auth.decorators import login_required
 
+from .utils import get_inventory_item_list, get_nomenclature_remain_list, update_remains
+
 from .forms import CreateInventoryTaskForm, InputBarcode, UpdateStatus
 from catalog.models import Nomenclature
 from .models import InventoryItem, InventoryTask, NomenclatureRemain
@@ -64,33 +66,37 @@ class InventoryTaskListView(LoginRequiredMixin, generic.ListView):
 
 @login_required
 def inventory_task_confirm(request, pk: int):
-    
+
     data_context = {}
-    inventory_task = InventoryTask.objects.get(pk=pk)
-    inventory_item_list = InventoryItem.objects.filter(
-        inventory_task=inventory_task)
-    confirm_task_list = []
-
-    for item in inventory_item_list:
-        if NomenclatureRemain.objects.filter(
-                nomenclature=item.nomenclature).exists():
-            confirm_task_list.append(NomenclatureRemain.objects.get(
-                nomenclature=item.nomenclature))
-
-        else:      
-            confirm_task_list.append(NomenclatureRemain.objects.create(
-                nomenclature=item.nomenclature))
-    
+    inventory_item_list = get_inventory_item_list(pk)
+    confirm_task_list = get_nomenclature_remain_list(inventory_item_list)
     compared_confirm_list = zip(inventory_item_list, confirm_task_list)
-    print(compared_confirm_list)
 
     data_context = {
-        'inventory_task': inventory_task,
-        'compared_confirm_list': compared_confirm_list
+        'title': 'Подтвердите завершение пересчета',
+        'compared_confirm_list': compared_confirm_list,
+        'task_id': pk,
     }
 
-
     return render(request, "inventory/inventory_task_confirm.html", data_context)
+
+
+@login_required
+def inventory_task_done(request, pk: int):
+    inventory_task = InventoryTask.objects.get(pk=pk)
+    inventory_item_list = get_inventory_item_list(pk)
+    nomenclature_remain_list = get_nomenclature_remain_list(
+        inventory_item_list)
+    inventory_task.status = InventoryTask.InventoryStatus.DONE
+    inventory_task.save()
+    update_remains(inventory_item_list, nomenclature_remain_list)
+    context_data = {
+        'title': f'Задание № {inventory_task.pk} завершено',
+        'inventory_task': inventory_task,
+        'nomenclature_remain_list': nomenclature_remain_list,
+    }
+
+    return render(request, 'inventory/inventory_task_done.html', context_data)
 
 
 @login_required
@@ -100,11 +106,14 @@ def inventory_task_detail(request, pk: int):
     inventory_item_list = InventoryItem.objects.filter(
         inventory_task=inventory_task)
 
+    if inventory_task.status == 'D':
+        return redirect('inventory_task_done', pk)
+
     if inventory_task.status == 'F' and request.method == 'POST':
         update_form = UpdateStatus(request.POST)
         form = update_form
 
-        if update_form.is_valid():
+        if form.is_valid():
             updating_task = InventoryTask.objects.get(id=inventory_task.pk)
             updating_task.status = 'IP'
             updating_task.save()
