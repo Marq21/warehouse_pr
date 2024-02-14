@@ -32,7 +32,7 @@ class NomenclatureRemain(models.Model):
 class InventoryTask(models.Model):
 
     class InventoryStatus(models.TextChoices):
-        FORMED = 'F', 'Формиурется'
+        FORMED = 'F', 'Формируется'
         IN_PROGRESS = 'IP', 'В работе'
         DONE = 'D', 'Завершено'
 

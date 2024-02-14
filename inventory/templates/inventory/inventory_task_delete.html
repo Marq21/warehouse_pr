@@ -1,0 +1,23 @@
+{% extends 'base_generic.html' %}
+
+{% block title %}
+      <title>{{title}}</title>
+{% endblock %}
+ 
+{% block content %}
+
+    <h1>{{ title }}</h1>
+    <div class="form-fields"> 
+        <form method="post">
+            {% csrf_token %}
+            {% if object.status == "IP" %}
+                <p>Задание {{ object }} находится в статусе 
+                    "<strong style="color: red;">{{ object.get_status_display }}</strong>"
+                    , вы уверены, что хотите удалить?</p>
+            {% endif %}
+            <p>Удалить задание на пересчёт: "{{ object }}"?</p>
+            <input class="btn btn-danger" type="submit" value="Удалить">
+        </form>
+    </div>
+
+{% endblock %}

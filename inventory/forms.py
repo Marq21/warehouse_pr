@@ -23,13 +23,14 @@ class CreateInventoryTaskForm(forms.ModelForm):
 class InputBarcode(forms.Form):
     barcode_input = forms.CharField(
         min_length=1, max_length=200, label='Введите штрих-код ', required=False)
-    
+
     def clean_barcode_input(self):
         barcode = self.cleaned_data['barcode_input']
         if not Nomenclature.objects.filter(barcode=barcode).exists():
             raise forms.ValidationError("Штрих-код отсутсвует в базе данных")
         return barcode
-    
 
-class UpdateStatus(forms.Form):
-    inventory_task_id = forms.IntegerField(widget=forms.HiddenInput(), required=False)
+
+class UpdateStatusForm(forms.Form):
+    inventory_task_id = forms.IntegerField(
+        widget=forms.HiddenInput(), required=False)

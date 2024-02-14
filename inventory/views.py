@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 
 from .utils import get_inventory_item_list, get_nomenclature_remain_list, update_remains
 
-from .forms import CreateInventoryTaskForm, InputBarcode, UpdateStatus
+from .forms import CreateInventoryTaskForm, InputBarcode, UpdateStatusForm
 from catalog.models import Nomenclature
 from .models import InventoryItem, InventoryTask, NomenclatureRemain
 from actions.utils import create_action
@@ -25,6 +25,27 @@ def show_list_of_quantity(request):
     }
     return render(request, 'inventory/list_of_remaining_quantities.html', data)
 
+
+class InventoryTaskListView(LoginRequiredMixin, generic.ListView):
+
+    model = InventoryTask
+    queryset = InventoryTask.objects.all()
+    context_object_name = 'inventory_task_list'
+    template_name = 'inventory/list_inventory_task.html'
+
+
+class DeleteInventoryTaskView(LoginRequiredMixin, generic.DeleteView):
+
+    model = InventoryTask
+    success_url = reverse_lazy('list-inventory-task')
+    template_name = "inventory/inventory_task_delete.html"
+
+    def get_context_data(self, **kwargs) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context["title"] = "Удалить задание на пересчёт"
+        return context
+    
+  
 
 class CreateInventoryTask(LoginRequiredMixin, FormView):
 
@@ -54,14 +75,6 @@ class CreateInventoryTask(LoginRequiredMixin, FormView):
         messages.success(self.request, 'Задание на пересчёт создано успешно')
 
         return super(CreateInventoryTask, self).form_valid(form)
-
-
-class InventoryTaskListView(LoginRequiredMixin, generic.ListView):
-
-    model = InventoryTask
-    queryset = InventoryTask.objects.all()
-    context_object_name = 'inventory_task_list'
-    template_name = 'inventory/list_inventory_task.html'
 
 
 @login_required
@@ -114,13 +127,15 @@ def inventory_task_detail(request, pk: int):
         return redirect('inventory_task_done', pk)
 
     if inventory_task.status == 'F' and request.method == 'POST':
-        update_form = UpdateStatus(request.POST)
+        update_form = UpdateStatusForm(request.POST)
         form = update_form
 
         if form.is_valid():
             updating_task = InventoryTask.objects.get(id=inventory_task.pk)
-            updating_task.status = 'IP'
+            updating_task.status = InventoryTask.InventoryStatus.IN_PROGRESS
             updating_task.save()
+
+        return redirect('inventory-task-detail', pk)
 
     elif inventory_task.status == 'IP' and request.method == 'POST':
         input_barcode_form = InputBarcode(request.POST)
@@ -136,7 +151,7 @@ def inventory_task_detail(request, pk: int):
                 messages.error(request, 'Товар не соответсвует категории!')
 
     elif inventory_task.status == 'F':
-        update_form = UpdateStatus()
+        update_form = UpdateStatusForm()
         form = update_form
 
     elif inventory_task.status == 'IP':

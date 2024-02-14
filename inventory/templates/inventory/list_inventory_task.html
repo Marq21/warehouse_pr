@@ -8,6 +8,7 @@
             <th>Название инвентаризации</th>
             <th>Дата создания</th>
             <th>Статус</th>
+            <th></th>
         </tr>
         {% for task in inventory_task_list %}
             <tr>
@@ -21,7 +22,12 @@
                 {% elif task.status == 'D' %}
                     <td style='color: green'>{{task.get_status_display}}</td>
                 {% endif %}
+                <td>
+                    <button class="btn btn-danger">
+                        <a class="delete-href" href="{% url 'inventory-task-delete' task.id %}">Удалить задание</button>
+                </td>
             </tr>
+            
         {% endfor %}
     </table>
     {% else %}
