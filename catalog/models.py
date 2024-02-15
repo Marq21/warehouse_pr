@@ -84,7 +84,7 @@ class Nomenclature(models.Model):
         super().save(*args, **kwargs)
 
 
-def get_barcode(barcode):
+def get_barcode(barcode=00000000000):
     parse_int = int(barcode) + 1
     place_for_number = len(str(parse_int))
     result = ['0' for _ in range(11)]

@@ -19,25 +19,24 @@ class NomenclatureModelTest(TestCase):
     def test_positive_cost_of_nom(self):
         nom = Nomenclature.objects.get(pk=1)
         field_label = nom.cost
-        print(field_label)
         self.assertTrue(field_label > 0)
 
     def test_weight_or_piece_default_weight_type(self):
         nom = Nomenclature.objects.get(pk=1)
         field_label = nom.weight_or_piece
-        print(field_label)
         self.assertEqual(field_label, 'PC')
 
     def test_slugify_method_in_save_model_function(self):
         nom = Nomenclature.objects.get(pk=1)
         nom.name = 'New name 1'
         nom.save()
-        print('new test is working')
         self.assertEqual(nom.slug, 'new-name-1')
 
     def test_get_barcode(self):
         nom = Nomenclature.objects.get(pk=1)
+        print(nom)
         nom.barcode = '00000000002'
+        nom.save()
         new_barcode = get_barcode(nom.barcode)
         self.assertEqual(new_barcode, '00000000003')
 

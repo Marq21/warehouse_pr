@@ -24,7 +24,6 @@ class NomenclatureHome(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['nomenclature_list'] = Nomenclature.objects.all()
-        context['get_test_data'] = self.request.GET.get('test')
         return context
 
 
@@ -42,12 +41,12 @@ class CategoryListView(generic.ListView):
     template_name = 'catalog/list-category.html'
 
 
-class AddNomenclature(LoginRequiredMixin, FormView):
+class AddNomenclature(LoginRequiredMixin, generic.CreateView):
     form_class = AddNomenclatureForm
     template_name = 'catalog/add_nomenclature.html'
     success_url = reverse_lazy('nomenclature-list-view')
     extra_context = {
-        'title': 'Добавление номенклатуры'
+        'title': 'Добавление номенклатуры',
     }
 
     def __init__(self, **kwargs):
