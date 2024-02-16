@@ -25,8 +25,8 @@ class NomenclatureViewTest(TestCase):
         self.assertEqual(resp.status_code, 200)
 
     def test_home_view(self):
-        c = Client()
-        resp = c.get("/", {'nomenclature_list': Nomenclature.objects.all()})
+        resp = self.client.get(
+            "/", {'nomenclature_list': Nomenclature.objects.all()})
         self.assertEqual(resp.status_code, 200)
 
     def test_add_nomenclature_by_status_code(self):
@@ -36,14 +36,22 @@ class NomenclatureViewTest(TestCase):
              'cost': 10, })
         self.assertEqual(resp.status_code, 302)
 
+    def test_edit_nomenclature_by_status_code(self):
+        nomenclature = Nomenclature.objects.last()
+        resp = self.client.post(
+            f'/catalog/edit_nomenclature/{nomenclature.pk}',
+            {'name': 'Nom_Test2',
+             'cost': 10, })
+        self.assertEqual(resp.status_code, 302)
+
 
 class CategoryListViewTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        number_of_noms = 13
-        for nomenclature_num in range(number_of_noms):
-            Category.objects.create(name='Category %s' % nomenclature_num)
+        number_of_cats = 13
+        for category_num in range(number_of_cats):
+            Category.objects.create(name='Category %s' % category_num)
 
     def test_category_list(self):
         resp = self.client.get(reverse('list-category'))

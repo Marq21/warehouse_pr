@@ -34,7 +34,6 @@ class NomenclatureModelTest(TestCase):
 
     def test_get_barcode(self):
         nom = Nomenclature.objects.get(pk=1)
-        print(nom)
         nom.barcode = '00000000002'
         nom.save()
         new_barcode = get_barcode(nom.barcode)
