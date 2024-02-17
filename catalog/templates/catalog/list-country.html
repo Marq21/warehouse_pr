@@ -1,0 +1,20 @@
+{% extends 'base_generic.html' %}
+{% block content %}
+    <h1>Страны изготовления</h1>
+    {% if countries %}
+    <table class='nom-table'>
+      <tr>
+        <th>№</th>
+        <th>Название страны</th>
+      </tr>
+      {% for country in countries %}
+          <tr>
+             <td>{{forloop.counter}}</td> 
+             <td><a class="td-nomenclature" href="{{ country.get_absolute_url }}">{{ country.name }}</a></td>    
+          </tr>
+      {% endfor %}
+    </table>
+    {% else %}
+      <p>Base is empty</p>
+    {% endif %}
+{% endblock %}

@@ -1,3 +1,4 @@
+from typing import Any
 from django.http import HttpResponseNotFound
 from django.shortcuts import get_object_or_404, render
 from django.contrib import messages
@@ -11,8 +12,8 @@ from django.views.generic import TemplateView
 from django.core.mail import send_mail
 
 from actions.utils import create_action
-from .forms import AddNomenclatureForm, EmailNomenclatureForm,  AddCategoryForm, SearchForm
-from .models import Nomenclature, Category, get_new_barcode
+from .forms import AddCountryForm, AddNomenclatureForm, EmailNomenclatureForm,  AddCategoryForm, SearchForm
+from .models import Country, Nomenclature, Category, get_new_barcode
 
 
 class NomenclatureHome(TemplateView):
@@ -122,7 +123,6 @@ class AddCategory(LoginRequiredMixin, FormView):
         return super(AddCategory, self).form_valid(form)
 
 
-
 class CategoryDetailView(LoginRequiredMixin, generic.DetailView):
     model = Category
 
@@ -141,6 +141,67 @@ def show_category(request, cat_slug):
         'cat_selected': category.pk,
     }
     return render(request, 'catalog/category.html', data)
+
+
+class CountryListView(LoginRequiredMixin, generic.ListView):
+    model = Country
+    queryset = Country.objects.all()
+    context_object_name = 'countries'
+    template_name = 'catalog/list-country.html'
+
+
+class AddCountry(LoginRequiredMixin, generic.CreateView):
+    form_class = AddCountryForm
+    template_name = 'catalog/add_country.html'
+    success_url = reverse_lazy('country-list')
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        country = form.save(commit=False)
+        form.save()
+        create_action(self.request.user, 'Добавление страны изг.',
+                      country)
+        messages.success(self.request, 'Добавление страны изг.: успешно')
+        return super(AddCountry, self).form_valid(form)
+
+
+class CountryDetailView(LoginRequiredMixin, generic.DetailView):
+    model = Country
+    template_name = 'catalog/country_detail.html'
+
+
+class EditCountry(LoginRequiredMixin, generic.UpdateView):
+    model = Country
+    fields = ['name',]
+    template_name = 'catalog/add_country.html'
+    success_url = reverse_lazy('country-list')
+    extra_context = {
+        'title': 'Изменение страны изготовления'
+    }
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        category = form.save(commit=False)
+        form.save()
+        create_action(self.request.user, 'Изменение категории',
+                      category)
+        messages.success(self.request, 'Изменение категории: успешно')
+        return super(EditCountry, self).form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, 'Category update failed')
+        return super(EditCountry, self).form_valid(form)
+
+
+class DeleteCountry(LoginRequiredMixin, generic.DeleteView):
+    model = Country
+    success_url = reverse_lazy('country-list')
+    template_name = "catalog/delete_country.html"
+
+    def get_context_data(self, **kwargs) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context["title"] = "Удалить страну изготовления"
+        return context
 
 
 def page_not_found(request, exception):

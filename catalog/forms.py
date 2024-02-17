@@ -2,7 +2,7 @@ from django import forms
 from captcha.fields import CaptchaField
 
 
-from .models import Nomenclature, Category
+from .models import Country, Nomenclature, Category
 
 
 class CaptchaTestForm(forms.Form):
@@ -30,6 +30,16 @@ class AddCategoryForm(forms.ModelForm):
 
     class Meta:
         model = Category
+        fields = ['name']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-input'}),
+        }
+
+
+class AddCountryForm(forms.ModelForm):
+
+    class Meta:
+        model = Country
         fields = ['name']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-input'}),

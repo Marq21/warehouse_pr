@@ -4,6 +4,18 @@ from django.contrib.auth.models import User
 from .utils import slugify
 
 
+class Country(models.Model):
+    name = models.CharField(max_length=100)
+    
+    class Meta:
+        ordering = ["name"]
+
+    def __str__(self) -> str:
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('country-detail', args={self.pk})
+    
 class Category(models.Model):
     name = models.CharField(max_length=100, db_index=True, )
     slug = models.SlugField(max_length=255, unique=True, db_index=True)

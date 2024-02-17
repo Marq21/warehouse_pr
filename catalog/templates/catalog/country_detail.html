@@ -1,0 +1,14 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+<div class="noms-detail">
+  <h2>Наименование: {{ country.name }}<h2>
+  <br>
+  <p>
+    <a href="{% url 'edit-country' country.id %}">
+      Изменить
+    </a>
+  </p>
+</div>
+
+{% endblock %}
