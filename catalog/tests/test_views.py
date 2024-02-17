@@ -56,3 +56,22 @@ class CategoryListViewTest(TestCase):
     def test_category_list(self):
         resp = self.client.get(reverse('list-category'))
         self.assertEqual(resp.status_code, 200)
+
+    def test_edit_category_by_status_code(self):
+        category = Category.objects.last()
+        resp = self.client.post(
+            f'/catalog/edit_category/{category.pk}',
+            {'name': 'Cat_Test2'})
+        self.assertEqual(resp.status_code, 302)
+
+    def test_add_category_by_status_code(self):
+        resp = self.client.post(
+            '/catalog/add_category/',
+            {'name': 'Cat_Test3',
+             'cost': 10, })
+        self.assertEqual(resp.status_code, 302)
+
+    def test_show_category_list(self):
+        resp = self.client.get(
+            '/catalog/list-category/', {'category_list': Category.objects.all()})
+        self.assertEqual(resp.status_code, 200)
