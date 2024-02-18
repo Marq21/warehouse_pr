@@ -153,6 +153,11 @@ p.date {
 .navbar-toggler {
   outline: none !important;
 }
+
+#add_country_ref {
+  color: #efefef
+}
+
 /* header */
 
 .list_category_change_btn {
