@@ -14,13 +14,13 @@
       </tr>
       {% for nomenclature in nomenclature_list %}
           <tr>
-             <td>{{forloop.counter}}</td> 
+             <td>{{ forloop.counter }}</td> 
              <td><a class="td-nomenclature" href="{{ nomenclature.get_absolute_url }}">{{ nomenclature.name }}</a></td>
              <td>{{nomenclature.cost}} &#8381</td>
              <td>{% if nomenclature.weight_or_piece == "WT" %} Вес {% else %} Шт {% endif %}</td>
-             <td>{{nomenclature.barcode}}</td>
-             <td><a class="td-nomenclature" href="{{ nomenclature.category.get_absolute_url }}">{{nomenclature.category}}</a></td>
-             <td>{{nomenclature.country_made}}</td>      
+             <td>{{ nomenclature.barcode }}</td>
+             <td><a class="td-nomenclature" href="{{ nomenclature.category.get_absolute_url }}">{{ nomenclature.category }}</a></td>
+             <td>{{ nomenclature.country_made_id }}</td>      
           </tr>
       {% endfor %}
     </table>
