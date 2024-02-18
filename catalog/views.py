@@ -65,7 +65,7 @@ class AddNomenclature(LoginRequiredMixin, generic.CreateView):
 class EditNomenclature(LoginRequiredMixin, UpdateView):
     model = Nomenclature
     fields = ['name', 'cost', 'weight_or_piece', 'barcode',
-              'slug', 'user', 'category', 'country_made']
+              'slug', 'user', 'category', 'country_made_id']
     template_name = 'catalog/add_nomenclature.html'
     success_url = reverse_lazy('nomenclature-list-view')
     extra_context = {

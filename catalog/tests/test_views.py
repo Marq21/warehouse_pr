@@ -1,7 +1,7 @@
 from django.test import TestCase
-from django.test import Client
+from django.contrib.auth.models import User
 
-from catalog.models import Category, Nomenclature
+from catalog.models import Category, Country, Nomenclature
 from django.urls import reverse
 
 
@@ -18,7 +18,7 @@ class NomenclatureViewTest(TestCase):
             n_barcode = ''.join(result)
             Nomenclature.objects.create(name='Nomenclature %s' % nomenclature_num,
                                         cost=10 + nomenclature_num,
-                                        barcode=n_barcode)
+                                        barcode=n_barcode,)
 
     def test_view_url_exists_at_desired_location(self):
         resp = self.client.get(reverse('nomenclature-list-view'))
@@ -45,7 +45,7 @@ class NomenclatureViewTest(TestCase):
         self.assertEqual(resp.status_code, 302)
 
 
-class CategoryListViewTest(TestCase):
+class CategoryViewTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
@@ -75,3 +75,42 @@ class CategoryListViewTest(TestCase):
         resp = self.client.get(
             '/catalog/list-category/', {'category_list': Category.objects.all()})
         self.assertEqual(resp.status_code, 200)
+
+
+class CountryViewTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.user = User.objects.create_user('john', 'lennon@thebeatles.com', 'johnpassword')
+        number_of_countries = 13
+        for country in range(number_of_countries):
+            Country.objects.create(name='Country %s' % country)
+
+    def test_country_list(self):
+        self.client.login(username='john', password='johnpassword')
+        resp = self.client.get('/catalog/country_list/')  
+        self.assertEqual(resp.status_code, 200)
+
+    def test_add_category_by_status_code(self):
+        resp = self.client.post(
+            '/catalog/add_country/',
+            {'name': 'Country_Test3',})
+        self.assertEqual(resp.status_code, 302)
+
+    def test_country_detail_by_status_code(self):
+        self.client.login(username='john', password='johnpassword')
+        country = Country.objects.last()
+        resp = self.client.get(f'/catalog/country_detail/{country.pk}')
+        self.assertEqual(resp.status_code, 200)
+
+    def test_edit_country_by_status_code(self):
+        country = Country.objects.last()
+        resp = self.client.post(
+            f'/catalog/edit_country/{country.pk}',
+            {'name': 'Country_Test2'})
+        self.assertEqual(resp.status_code, 302)
+
+    def test_delete_country_by_status_code(self):
+        country = Country.objects.last()
+        resp = self.client.post(
+            f'/catalog/delete_country/{country.id}',)
+        self.assertEqual(resp.status_code, 302)

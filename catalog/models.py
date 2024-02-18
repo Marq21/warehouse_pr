@@ -74,11 +74,13 @@ class Nomenclature(models.Model):
         null=True,
         verbose_name='Категория'
     )
-    country_made = models.CharField(
-        max_length=50,
+    country_made_id = models.ForeignKey(
+        Country,
+        on_delete=models.DO_NOTHING,
+        related_name='nomenclatures',
+        null=True,
         blank=True,
-        verbose_name='Страна изготовления',
-        help_text='Enter the country')
+    )
 
     class Meta:
         ordering = ["name", "-cost"]

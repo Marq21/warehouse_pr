@@ -17,7 +17,7 @@ class AddNomenclatureForm(forms.ModelForm):
         model = Nomenclature
         fields = ['name', 'weight_or_piece',
                   'barcode', 'cost',
-                  'category', 'country_made',]
+                  'category', 'country_made_id',]
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-input'}),
         }
