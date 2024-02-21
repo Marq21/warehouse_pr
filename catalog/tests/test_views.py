@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 from catalog.models import Category, Country, Nomenclature
 from django.urls import reverse
 
+from catalog.views import NomenclatureHome
+
 
 class NomenclatureViewTest(TestCase):
 
@@ -28,6 +30,15 @@ class NomenclatureViewTest(TestCase):
         resp = self.client.get(
             "/", {'nomenclature_list': Nomenclature.objects.all()})
         self.assertEqual(resp.status_code, 200)
+
+    def test_home_view_get_context(self):
+        nomenclature_list = Nomenclature.objects.all()
+        resp = self.client.get("/")
+        view = NomenclatureHome()
+        view.setup(resp)
+
+        context = view.get_context_data()
+        self.assertQuerySetEqual(nomenclature_list, context["nomenclature_list"])
 
     def test_add_nomenclature_by_status_code(self):
         resp = self.client.post(
