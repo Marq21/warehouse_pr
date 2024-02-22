@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from catalog.models import Nomenclature, get_barcode, get_new_barcode
+from catalog.models import Country, Nomenclature, get_barcode, get_new_barcode
 
 
 class NomenclatureModelTest(TestCase):
@@ -41,3 +41,16 @@ class NomenclatureModelTest(TestCase):
     def test_get_new_barcode(self):
         new_barcode = get_new_barcode()
         self.assertEqual(new_barcode, '00000000002')
+
+
+class CountryModelTest(TestCase):
+
+    @classmethod
+    def setUpTestData(cls):
+        Country.objects.create(
+            name='Test_Country')
+        
+    def test_str(self):
+        name = 'Test_Country'
+        country = Country.objects.get(name = name)
+        self.assertEqual(str(country), 'Test_Country')
