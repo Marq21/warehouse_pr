@@ -1,4 +1,3 @@
-from decimal import Decimal
 from django.test import TestCase
 
 from catalog.models import Nomenclature, get_barcode, get_new_barcode
