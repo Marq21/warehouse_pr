@@ -32,7 +32,7 @@ class TestCreateAction(TestCase):
         result = create_action(user, 'Добавление номенклатуры', nom)
         self.assertTrue(result)
 
-    def test_crea_action_nom_false_case(self):
+    def test_create_action_nom_false_case(self):
         user = User.objects.get(username='john')
         nom = Nomenclature.objects.create(
             name='Test_Nom', cost='10.0', barcode='00000000001')
