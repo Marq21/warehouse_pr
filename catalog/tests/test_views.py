@@ -5,22 +5,10 @@ from catalog.models import Category, Country, Nomenclature
 from django.urls import reverse
 
 from catalog.views import NomenclatureHome
+from warehouse_pr.tests import TestBasedModel
 
 
-class NomenclatureViewTest(TestCase):
-
-    @classmethod
-    def setUpTestData(cls):
-        number_of_noms = 13
-        for nomenclature_num in range(number_of_noms):
-            parse_int = int('00000000000') + nomenclature_num
-            place_for_number = len(str(parse_int))
-            result = ['0' for _ in range(11)]
-            result[-place_for_number:] = str(parse_int)
-            n_barcode = ''.join(result)
-            Nomenclature.objects.create(name='Nomenclature %s' % nomenclature_num,
-                                        cost=10 + nomenclature_num,
-                                        barcode=n_barcode,)
+class NomenclatureViewTest(TestBasedModel):
 
     def test_view_url_exists_at_desired_location(self):
         resp = self.client.get(reverse('nomenclature-list-view'))
