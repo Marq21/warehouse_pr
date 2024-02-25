@@ -131,7 +131,7 @@ class NomenclatureDetailView(LoginRequiredMixin, generic.DetailView):
     model = Nomenclature
 
 
-@login_required
+@login_required(login_url='/login/')
 def show_category(request, cat_slug):
     category = get_object_or_404(Category, slug=cat_slug)
     nomenclatures = Nomenclature.objects.filter(category_id=category.pk)

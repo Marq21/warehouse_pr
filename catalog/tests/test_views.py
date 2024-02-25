@@ -44,13 +44,7 @@ class NomenclatureViewTest(TestBasedModel):
         self.assertEqual(resp.status_code, 302)
 
 
-class CategoryViewTest(TestCase):
-
-    @classmethod
-    def setUpTestData(cls):
-        number_of_cats = 13
-        for category_num in range(number_of_cats):
-            Category.objects.create(name='Category %s' % category_num)
+class CategoryViewTest(TestBasedModel):
 
     def test_category_list(self):
         resp = self.client.get(reverse('list-category'))
@@ -75,14 +69,15 @@ class CategoryViewTest(TestCase):
             '/catalog/list-category/', {'category_list': Category.objects.all()})
         self.assertEqual(resp.status_code, 200)
 
+    def test_category_detail(self):
+        self.client.login(username='john', password='johnpassword')
+        cat_slug = Category.objects.last().slug
+        resp = self.client.get(
+            f'/catalog/category/{cat_slug}')
+        self.assertEqual(resp.status_code, 200)
 
-class CountryViewTest(TestCase):
-    @classmethod
-    def setUpTestData(cls):
-        cls.user = User.objects.create_user('john', 'lennon@thebeatles.com', 'johnpassword')
-        number_of_countries = 13
-        for country in range(number_of_countries):
-            Country.objects.create(name='Country %s' % country)
+
+class CountryViewTest(TestBasedModel):
 
     def test_country_list(self):
         self.client.login(username='john', password='johnpassword')
