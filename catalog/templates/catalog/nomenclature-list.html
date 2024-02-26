@@ -20,7 +20,7 @@
              <td>{% if nomenclature.weight_or_piece == "WT" %} Вес {% else %} Шт {% endif %}</td>
              <td>{{ nomenclature.barcode }}</td>
              <td><a class="td-nomenclature" href="{{ nomenclature.category.get_absolute_url }}">{{ nomenclature.category }}</a></td>
-             <td>{{ nomenclature.country_made_id }}</td>      
+             <td>{% if nomenclature.country_made_id == None %}----{% else %}{{ nomenclature.country_made_id }}{% endif %}</td>      
           </tr>
       {% endfor %}
     </table>

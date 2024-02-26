@@ -17,4 +17,5 @@ class TestFormValidAddNomenclatureForm(TestBasedModel):
 
     def test_new_patient_form_is_valid(self):
         form = AddNomenclatureForm(data=self.form_data)
+        print(form)
         self.assertTrue(form.is_valid())
