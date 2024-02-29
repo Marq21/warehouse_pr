@@ -1,9 +1,10 @@
 from django.test import RequestFactory
-from catalog.forms import AddCategoryForm
+from catalog.forms import AddCategoryForm, AddNomenclatureForm
 from catalog.models import Category, Country, Nomenclature
-from catalog.views import AddNomenclature, NomenclatureHome
+from catalog.views import AddNomenclature, EditNomenclature, NomenclatureHome
 from django.contrib.auth.models import User
 from django.urls import reverse
+from django.contrib import messages
 
 from warehouse_pr.tests import TestBasedModel
 
@@ -41,12 +42,55 @@ class NomenclatureViewTest(TestBasedModel):
         self.assertQuerySetEqual(
             nomenclature_list, context["nomenclature_list"])
 
-
     def test_call_view_fail_blank(self):
         response = self.client.post(
             reverse('add-nomenclature'), {})
         self.assertFormError(response, 'form', 'name',
                              'Это поле обязательно для заполнения.')
+
+    def test_create_view_POST_success_form_valid(self):
+
+        data = {
+            'name': 'nome_CreateView_test',
+            'weight_or_piece': Nomenclature.NomsType.PIECE,
+            'barcode': '00000100000',
+            'cost': 10.0,
+            'category': self.cat,
+            'country_made_id': self.country,
+        }
+
+        form = AddNomenclatureForm(data)
+        request = self.factory.post('/catalog/add_nomenclature/', data=data)
+        request.user = self.user
+        request._messages = messages.storage.default_storage(request)
+        view = AddNomenclature()
+        view.setup(request)
+        self.assertTrue(view.form_valid(form=form))
+        self.assertTrue(Nomenclature.objects.get(name='nome_CreateView_test'))
+
+    def test_update_view_POST_success_form_valid(self):
+        nom = Nomenclature.objects.last()
+        name_for_compare_in_assert = nom.name
+        data = {
+            'name': "New_Nom_Name",
+            'weight_or_piece': nom.weight_or_piece,
+            'barcode': nom.barcode,
+            'cost': 13,
+            'category': self.cat,
+            'country_made_id': self.country,
+            'user': self.user,
+        }
+
+        form = AddNomenclatureForm(data)
+        request = self.factory.post(
+            f'/catalog/edit_nomenclature/{nom.id}', data=data)
+        request.user = self.user
+        request._messages = messages.storage.default_storage(request)
+        view = EditNomenclature()
+        view.setup(request)
+        self.assertTrue(view.form_valid(form=form))
+        self.assertFalse(Nomenclature.objects.get(
+            name='New_Nom_Name') == name_for_compare_in_assert)
 
 
 class CategoryViewTest(TestBasedModel):
@@ -90,7 +134,7 @@ class CountryViewTest(TestBasedModel):
         resp = self.client.get('/catalog/country_list/')
         self.assertEqual(resp.status_code, 200)
 
-    def test_add_category_by_status_code(self):
+    def test_add_country_by_status_code(self):
         resp = self.client.post(
             '/catalog/add_country/',
             {'name': 'Country_Test3', })

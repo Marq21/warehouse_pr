@@ -64,8 +64,7 @@ class AddNomenclature(LoginRequiredMixin, generic.CreateView):
 
 class EditNomenclature(LoginRequiredMixin, UpdateView):
     model = Nomenclature
-    fields = ['name', 'cost', 'weight_or_piece', 'barcode',
-              'slug', 'user', 'category', 'country_made_id']
+    form_class = AddNomenclatureForm
     template_name = 'catalog/add_nomenclature.html'
     success_url = reverse_lazy('nomenclature-list-view')
     extra_context = {
@@ -82,7 +81,7 @@ class EditNomenclature(LoginRequiredMixin, UpdateView):
 
     def form_invalid(self, form):
         messages.error(self.request, 'Page update failed')
-        return super(EditNomenclature, self).form_valid(form)
+        return super(EditNomenclature, self).form_invalid(form)
 
 
 class EditCategory(LoginRequiredMixin, UpdateView):
@@ -105,7 +104,7 @@ class EditCategory(LoginRequiredMixin, UpdateView):
 
     def form_invalid(self, form):
         messages.error(self.request, 'Category update failed')
-        return super(EditCategory, self).form_valid(form)
+        return super(EditCategory, self).form_invalid(form)
 
 
 class AddCategory(LoginRequiredMixin, FormView):
@@ -190,7 +189,7 @@ class EditCountry(LoginRequiredMixin, generic.UpdateView):
 
     def form_invalid(self, form):
         messages.error(self.request, 'Category update failed')
-        return super(EditCountry, self).form_valid(form)
+        return super(EditCountry, self).form_invalid(form)
 
 
 class DeleteCountry(LoginRequiredMixin, generic.DeleteView):
