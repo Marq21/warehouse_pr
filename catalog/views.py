@@ -232,7 +232,6 @@ def nom_search(request):
     form = SearchForm()
     query = None
     results = []
-    print(request.GET)
 
     if 'query' in request.GET:
         form = SearchForm(request.GET)

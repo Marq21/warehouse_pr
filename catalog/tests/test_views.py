@@ -63,10 +63,29 @@ class NomenclatureViewTest(TestBasedModel):
         request = self.factory.post('/catalog/add_nomenclature/', data=data)
         request.user = self.user
         request._messages = messages.storage.default_storage(request)
-        view = AddNomenclature()
-        view.setup(request)
-        self.assertTrue(view.form_valid(form=form))
+        add_view = AddNomenclature()
+        add_view.setup(request)
+        self.assertTrue(add_view.form_valid(form=form))
         self.assertTrue(Nomenclature.objects.get(name='nome_CreateView_test'))
+
+    def test_update_view_POST_form_invalid(self):
+        nom = Nomenclature.objects.last()
+        data = {
+            'name': 'nome_CreateView_test',
+                'weight_or_piece': Nomenclature.NomsType.PIECE,
+                'barcode': '00000100000',
+                'cost': 10.0,
+                'category': self.cat,
+                'country_made_id': 'keks', }
+
+        form = AddNomenclatureForm(data)
+        request = self.factory.post(
+            f'/catalog/edit_nomenclature/{nom.id}', data=data)
+        request.user = self.user
+        request._messages = messages.storage.default_storage(request)
+        edit_view = EditNomenclature(object=nom)
+        edit_view.setup(request)
+        self.assertTrue(edit_view.form_invalid(form=form))
 
     def test_update_view_POST_success_form_valid(self):
         nom = Nomenclature.objects.last()
