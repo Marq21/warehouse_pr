@@ -86,7 +86,7 @@ class EditNomenclature(LoginRequiredMixin, UpdateView):
 
 class EditCategory(LoginRequiredMixin, UpdateView):
     model = Category
-    fields = ['name', 'slug',]
+    form_class = AddCategoryForm
     template_name = 'catalog/add_category.html'
     success_url = reverse_lazy('list-category')
     extra_context = {
@@ -171,7 +171,7 @@ class CountryDetailView(LoginRequiredMixin, generic.DetailView):
 
 class EditCountry(LoginRequiredMixin, generic.UpdateView):
     model = Country
-    fields = ['name',]
+    form_class = AddCountryForm
     template_name = 'catalog/add_country.html'
     success_url = reverse_lazy('country-list')
     extra_context = {
