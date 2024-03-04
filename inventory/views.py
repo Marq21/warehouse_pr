@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 
 from .utils import get_inventory_item_list, get_nomenclature_remain_list, update_remains
 
-from .forms import CreateInventoryTaskForm, InputBarcode, UpdateStatusForm
+from .forms import CreateInventoryTaskForm, InputBarcodeForm, UpdateStatusForm
 from catalog.models import Nomenclature
 from .models import InventoryItem, InventoryTask, NomenclatureRemain
 from actions.utils import create_action
@@ -138,7 +138,7 @@ def inventory_task_detail(request, pk: int):
         return redirect('inventory-task-detail', pk)
 
     elif inventory_task.status == 'IP' and request.method == 'POST':
-        input_barcode_form = InputBarcode(request.POST)
+        input_barcode_form = InputBarcodeForm(request.POST)
         form = input_barcode_form
 
         if form.is_valid():
@@ -156,7 +156,7 @@ def inventory_task_detail(request, pk: int):
         form = update_form
 
     elif inventory_task.status == 'IP':
-        input_barcode_form = InputBarcode()
+        input_barcode_form = InputBarcodeForm()
         form = input_barcode_form
 
     data = {
