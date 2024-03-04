@@ -146,7 +146,8 @@ def inventory_task_detail(request, pk: int):
             category = inventory_task.category
             nom = Nomenclature.objects.get(barcode=barcode)
             if nom.category == category:
-                return redirect('inventory-item-update', pk=inventory_task.pk, permanent=True)
+                inventory_item_pk = inventory_item_list.get(nomenclature=nom).pk
+                return redirect('inventory-item-update', pk=inventory_item_pk, permanent=True)
             else:
                 messages.error(request, 'Товар не соответсвует категории!')
 
