@@ -24,7 +24,7 @@ class NomenclatureRemain(models.Model):
         return f'{self.name}'
 
     def save(self, *args, **kwargs):
-        self.name = f'{Nomenclature.objects.get(id=self.nomenclature.id).name} {datetime.now()}'
+        self.name = f'{Nomenclature.objects.get(id=self.nomenclature.id).name} {datetime.now().strftime("%m/%d/%Y, %H:%M:%S")}'
         self.slug = slugify(self.name)
         super().save(*args, **kwargs)
 
@@ -89,7 +89,7 @@ class InventoryItem(models.Model):
         return f'{self.name}'
 
     def save(self, *args, **kwargs):
-        self.name = f'{Nomenclature.objects.get(id=self.nomenclature.id).name}-{datetime.now()}-{self.inventory_task.pk}'
+        self.name = f'{Nomenclature.objects.get(id=self.nomenclature.id).name}-{datetime.now().strftime("%m/%d/%Y, %H:%M:%S")}-{self.inventory_task.pk}'
         super().save(*args, **kwargs)
 
     def get_absolute_url(self):
