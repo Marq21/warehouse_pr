@@ -22,7 +22,7 @@ def get_inventory_item_list(inventory_task_pk: int):
     inventory_task = InventoryTask.objects.get(pk=inventory_task_pk)
     inventory_item_list = InventoryItem.objects.filter(
         inventory_task=inventory_task)
-    return inventory_item_list
+    return list(inventory_item_list)
 
 
 def update_remains(inventory_item_list: list, nomenclature_remain_list: list):

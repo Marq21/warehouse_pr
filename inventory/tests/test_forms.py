@@ -1,4 +1,5 @@
 from django import forms
+from django.test import Client
 from inventory.forms import InputBarcodeForm
 from catalog.models import Nomenclature
 from warehouse_pr.tests import TestBasedModel
