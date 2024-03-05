@@ -287,11 +287,6 @@ class TestNomSearch(TestBasedModel):
         resp = self.client.get("/catalog/search/")
         self.assertEqual(resp.status_code, 200)
 
-    # def test_nom_search_status_code_with_query(self):
-    #     resp = self.client.get(
-    #         f"/catalog/search/?query={Nomenclature.objects.last().name}")
-    #     self.assertEqual(resp.status_code, 200)
-
 
 class NomShareTest(TestBasedModel):
 
