@@ -19,7 +19,5 @@ class NomenclatureTestCase(APITestCase):
 
     def test_get(self):
         url = reverse('nomenclature-list-view')
-        print(url)
         response = self.client.get(url)
-        print(response)
         self.assertEqual(status.HTTP_200_OK, response.status_code)
