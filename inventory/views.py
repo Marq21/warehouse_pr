@@ -161,7 +161,7 @@ def inventory_task_detail(request, pk: int):
 
     data = {
         'title': f'Задание на пересчёт: {inventory_task} №{inventory_task.pk} ',
-        'inventory_item_list': inventory_item_list,
+        'inventory_item_list': list(inventory_item_list),
         'task': inventory_task,
         'form': form,
     }

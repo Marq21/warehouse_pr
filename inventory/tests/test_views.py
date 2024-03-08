@@ -3,9 +3,9 @@ from django.test import RequestFactory
 from django.urls import reverse
 from inventory.models import InventoryItem, InventoryTask, NomenclatureRemain
 from catalog.models import Category, Nomenclature
-from inventory.forms import CreateInventoryTaskForm, UpdateStatusForm
+from inventory.forms import CreateInventoryTaskForm, InputBarcodeForm, UpdateStatusForm
 from django.contrib import messages
-from inventory.views import CreateInventoryTask, inventory_task_confirm
+from inventory.views import CreateInventoryTask, inventory_task_confirm, inventory_task_detail
 
 from warehouse_pr.tests import TestBasedModel
 
@@ -38,6 +38,10 @@ class InventoryTaskViewTest(TestBasedModel):
         self.factory = RequestFactory()
         self.inv_task = InventoryTask.objects.create(
             name='test_inventory_for_view',
+        )
+        self.inv_item = InventoryItem.objects.create(
+            nomenclature=Nomenclature.objects.last(),
+            inventory_task=self.inv_task,
         )
         self.client.login(username='john', password='johnpassword')
         self.user = User.objects.get(username='john')
@@ -132,3 +136,34 @@ class InventoryTaskViewTest(TestBasedModel):
             f"/inventory/inventory_task_detail/{self.inv_task.pk}")
         self.assertRedirects(resp, reverse(
             'inventory-task-detail', kwargs={'pk': self.inv_task.pk}))
+
+    def test_inventory_task_detai_in_progress_status(self):
+
+        self.inv_task.status = InventoryTask.InventoryStatus.IN_PROGRESS
+        self.inv_task.save()
+        resp = self.client.get(
+            f"/inventory/inventory_task_detail/{self.inv_task.pk}")
+
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(
+            resp.context['title'], f'Задание на пересчёт: {self.inv_task} №{self.inv_task.pk} ')
+        self.assertIsInstance(resp.context['inventory_item_list'], list)
+        self.assertIsInstance(resp.context['form'], InputBarcodeForm)
+        self.assertEqual(resp.context['task'], self.inv_task)
+
+        # data = {'barcode': self.inv_item.nomenclature.barcode}
+        # item_id = self.inv_item.id
+        # request = self.client.post(
+        #     f"/inventory/inventory_task_detail/{self.inv_task.pk}", data=data)
+        # print(request)
+        # self.assertRedirects(
+        #     request, expected_url=f'/inventory/inventory_item/{item_id}', target_status_code=302)
+
+    # def test_inventory_task_detai_done_status(self):
+    #     self.inv_task.status = InventoryTask.InventoryStatus.DONE
+    #     self.inv_task.save()
+    #     resp = self.client.get(
+    #         f"/inventory/inventory_task_detail/{self.inv_task.pk}")
+    #     self.assertEqual(resp.status_code, 302)
+    #     self.assertRedirects(
+    #         resp, reverse('inventory_task_done', kwargs={'pk': self.inv_task.pk}), target_status_code=302)
