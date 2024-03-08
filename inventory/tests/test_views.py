@@ -150,10 +150,6 @@ class InventoryTaskViewTest(TestBasedModel):
         self.assertIsInstance(resp.context['form'], InputBarcodeForm)
         self.assertEqual(resp.context['task'], self.inv_task)
 
-        print(self.inv_item.nomenclature.barcode)
-        print(self.inv_item.nomenclature.category)
-        print(self.inv_item.inventory_task)
-
         data = {
             'barcode_input': self.inv_item.nomenclature.barcode,
         }
@@ -174,5 +170,12 @@ class InventoryTaskViewTest(TestBasedModel):
         self.assertEqual(resp.redirect_chain[0][1], 302)
         self.assertRedirects(
             resp, f'/inventory/accept_task/done/{self.inv_task.pk}')
-        
-    
+
+    def test_item_update_view_get_success_url(self):
+        resp = self.client.post(
+            f"/inventory/inventory_item/{self.inv_item.pk}", follow=True)
+        print(resp)
+        self.assertRedirects(
+            resp, reverse('inventory-task-detail',
+                          args=[self.inv_item.inventory_task.pk])
+        )
