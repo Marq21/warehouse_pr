@@ -98,7 +98,7 @@ def inventory_task_confirm(request, pk: int):
 def inventory_task_done(request, pk: int):
 
     inventory_task = InventoryTask.objects.get(pk=pk)
-    inventory_item_list = get_inventory_item_list(pk)
+    inventory_item_list = get_inventory_item_list(inventory_task)
     nomenclature_remain_list = get_nomenclature_remain_list(
         inventory_item_list)
 

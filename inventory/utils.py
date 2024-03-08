@@ -18,8 +18,7 @@ def get_nomenclature_remain_list(inventory_item_list: list):
     return confirm_task_list
 
 
-def get_inventory_item_list(inventory_task_pk: int):
-    inventory_task = InventoryTask.objects.get(pk=inventory_task_pk)
+def get_inventory_item_list(inventory_task: InventoryTask):
     inventory_item_list = InventoryItem.objects.filter(
         inventory_task=inventory_task)
     return list(inventory_item_list)

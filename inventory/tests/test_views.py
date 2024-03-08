@@ -84,5 +84,13 @@ class InventoryTaskViewTest(TestBasedModel):
         self.assertTrue(InventoryTask.objects.get(
             name='inventory_task_view_test'))
         
-    def test_inventory_task_confirm_view(self):
-        pass
+    # def test_inventory_task_confirm_view(self):
+    #     task_pk
+    #     nomenclature_list = Nomenclature.objects.all()
+    #     resp = self.client.get("/")
+    #     view = NomenclatureHome()
+    #     view.setup(resp)
+
+    #     context = view.get_context_data()
+    #     self.assertQuerySetEqual(
+    #         nomenclature_list, context["nomenclature_list"])
