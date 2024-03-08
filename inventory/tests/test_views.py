@@ -105,3 +105,13 @@ class InventoryTaskViewTest(TestBasedModel):
             f"/inventory/accept_task/confirm/{self.inv_task.pk}", follow=True)
         self.assertRedirects(
             response, f'/accounts/login/?next=/inventory/accept_task/confirm/{self.inv_task.pk}')
+
+    def test_inventory_task_done(self):
+        resp = self.client.post(
+            f"/inventory/accept_task/done/{self.inv_task.pk}")
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.context['title'],
+                         f'Задание № {self.inv_task.pk} завершено')
+        self.assertEqual(resp.context['inventory_task'], self.inv_task)
+        self.assertIsInstance(resp.context['nomenclature_remain_list'],
+                              list)
