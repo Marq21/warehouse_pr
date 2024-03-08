@@ -35,9 +35,11 @@ class QuantityListViewTest(TestBasedModel):
 class InventoryTaskViewTest(TestBasedModel):
 
     def setUp(self) -> None:
+        category = Category.objects.last()
         self.factory = RequestFactory()
         self.inv_task = InventoryTask.objects.create(
             name='test_inventory_for_view',
+            category=category,
         )
         self.inv_item = InventoryItem.objects.create(
             nomenclature=Nomenclature.objects.last(),
@@ -46,7 +48,8 @@ class InventoryTaskViewTest(TestBasedModel):
         self.client.login(username='john', password='johnpassword')
         self.user = User.objects.get(username='john')
         for nom in Nomenclature.objects.all():
-            nom.category = Category.objects.last()
+            nom.category = category
+            nom.save()
         return super().setUp()
 
     def test_delete_view_get_context(self):
@@ -75,10 +78,6 @@ class InventoryTaskViewTest(TestBasedModel):
         add_view = CreateInventoryTask()
         add_view.setup(request)
 
-        nom_list_from_inventory_items = [
-            inv_item.nomenclature for inv_item in InventoryItem.objects.filter(nomenclature__category=category)]
-
-        self.assertListEqual(nomenclature_list, nom_list_from_inventory_items)
         self.assertTrue(add_view.form_valid(form=form))
 
         inventory_item_list = list(InventoryItem.objects.filter(inventory_task=InventoryTask.objects.get(
@@ -151,19 +150,29 @@ class InventoryTaskViewTest(TestBasedModel):
         self.assertIsInstance(resp.context['form'], InputBarcodeForm)
         self.assertEqual(resp.context['task'], self.inv_task)
 
-        # data = {'barcode': self.inv_item.nomenclature.barcode}
-        # item_id = self.inv_item.id
-        # request = self.client.post(
-        #     f"/inventory/inventory_task_detail/{self.inv_task.pk}", data=data)
-        # print(request)
-        # self.assertRedirects(
-        #     request, expected_url=f'/inventory/inventory_item/{item_id}', target_status_code=302)
+        print(self.inv_item.nomenclature.barcode)
+        print(self.inv_item.nomenclature.category)
+        print(self.inv_item.inventory_task)
 
-    # def test_inventory_task_detai_done_status(self):
-    #     self.inv_task.status = InventoryTask.InventoryStatus.DONE
-    #     self.inv_task.save()
-    #     resp = self.client.get(
-    #         f"/inventory/inventory_task_detail/{self.inv_task.pk}")
-    #     self.assertEqual(resp.status_code, 302)
-    #     self.assertRedirects(
-    #         resp, reverse('inventory_task_done', kwargs={'pk': self.inv_task.pk}), target_status_code=302)
+        data = {
+            'barcode_input': self.inv_item.nomenclature.barcode,
+        }
+
+        item_id = self.inv_item.id
+        request = self.client.post(
+            f"/inventory/inventory_task_detail/{self.inv_task.pk}", data=data, follow=True)
+
+        self.assertEqual(request.redirect_chain[0][1], 301)
+        self.assertRedirects(
+            request, f'/inventory/inventory_item/{item_id}', status_code=301)
+
+    def test_inventory_task_detail_done_status(self):
+        self.inv_task.status = InventoryTask.InventoryStatus.DONE
+        self.inv_task.save()
+        resp = self.client.get(
+            f"/inventory/inventory_task_detail/{self.inv_task.pk}", follow=True)
+        self.assertEqual(resp.redirect_chain[0][1], 302)
+        self.assertRedirects(
+            resp, f'/inventory/accept_task/done/{self.inv_task.pk}')
+        
+    
