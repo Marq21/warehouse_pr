@@ -5,7 +5,7 @@ from inventory.models import InventoryItem, InventoryTask, NomenclatureRemain
 from catalog.models import Category, Nomenclature
 from inventory.forms import CreateInventoryTaskForm
 from django.contrib import messages
-from inventory.views import CreateInventoryTask
+from inventory.views import CreateInventoryTask, inventory_task_confirm
 
 from warehouse_pr.tests import TestBasedModel
 
@@ -83,14 +83,25 @@ class InventoryTaskViewTest(TestBasedModel):
         self.assertEqual(len(inventory_item_list), len(nomenclature_list))
         self.assertTrue(InventoryTask.objects.get(
             name='inventory_task_view_test'))
-        
-    # def test_inventory_task_confirm_view(self):
-    #     task_pk
-    #     nomenclature_list = Nomenclature.objects.all()
-    #     resp = self.client.get("/")
-    #     view = NomenclatureHome()
-    #     view.setup(resp)
 
-    #     context = view.get_context_data()
-    #     self.assertQuerySetEqual(
-    #         nomenclature_list, context["nomenclature_list"])
+    def test_inventory_task_confirm_view(self):
+        resp = self.client.post(
+            f"/inventory/accept_task/confirm/{self.inv_task.pk}")
+        self.assertTrue(
+            resp.context['title'], 'Подтвердите завершение пересчета')
+        self.assertIsInstance(
+            resp.context['compared_confirm_list'], zip)
+        self.assertEqual(
+            resp.context['task_id'], self.inv_task.pk
+        )
+
+    def test_call_view_deny_anonymous(self):
+        self.client.logout()
+        response = self.client.get(
+            f"/inventory/accept_task/confirm/{self.inv_task.pk}", follow=True)
+        self.assertRedirects(
+            response, f'/accounts/login/?next=/inventory/accept_task/confirm/{self.inv_task.pk}')
+        response = self.client.post(
+            f"/inventory/accept_task/confirm/{self.inv_task.pk}", follow=True)
+        self.assertRedirects(
+            response, f'/accounts/login/?next=/inventory/accept_task/confirm/{self.inv_task.pk}')
