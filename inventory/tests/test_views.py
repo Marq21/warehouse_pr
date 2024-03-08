@@ -3,7 +3,7 @@ from django.test import RequestFactory
 from django.urls import reverse
 from inventory.models import InventoryItem, InventoryTask, NomenclatureRemain
 from catalog.models import Category, Nomenclature
-from inventory.forms import CreateInventoryTaskForm
+from inventory.forms import CreateInventoryTaskForm, UpdateStatusForm
 from django.contrib import messages
 from inventory.views import CreateInventoryTask, inventory_task_confirm
 
@@ -115,3 +115,20 @@ class InventoryTaskViewTest(TestBasedModel):
         self.assertEqual(resp.context['inventory_task'], self.inv_task)
         self.assertIsInstance(resp.context['nomenclature_remain_list'],
                               list)
+
+    def test_inventory_task_detai_formed_status(self):
+        self.inv_task.status = InventoryTask.InventoryStatus.FORMED
+        resp = self.client.get(
+            f"/inventory/inventory_task_detail/{self.inv_task.pk}")
+
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(
+            resp.context['title'], f'Задание на пересчёт: {self.inv_task} №{self.inv_task.pk} ')
+        self.assertIsInstance(resp.context['inventory_item_list'], list)
+        self.assertIsInstance(resp.context['form'], UpdateStatusForm)
+        self.assertEqual(resp.context['task'], self.inv_task)
+
+        resp = self.client.post(
+            f"/inventory/inventory_task_detail/{self.inv_task.pk}")
+        self.assertRedirects(resp, reverse(
+            'inventory-task-detail', kwargs={'pk': self.inv_task.pk}))

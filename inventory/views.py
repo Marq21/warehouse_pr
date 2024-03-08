@@ -44,8 +44,7 @@ class DeleteInventoryTaskView(LoginRequiredMixin, generic.DeleteView):
         context = super().get_context_data(**kwargs)
         context["title"] = "Удалить задание на пересчёт"
         return context
-    
-  
+
 
 class CreateInventoryTask(LoginRequiredMixin, FormView):
 
@@ -146,7 +145,8 @@ def inventory_task_detail(request, pk: int):
             category = inventory_task.category
             nom = Nomenclature.objects.get(barcode=barcode)
             if nom.category == category:
-                inventory_item_pk = inventory_item_list.get(nomenclature=nom).pk
+                inventory_item_pk = inventory_item_list.get(
+                    nomenclature=nom).pk
                 return redirect('inventory-item-update', pk=inventory_item_pk, permanent=True)
             else:
                 messages.error(request, 'Товар не соответсвует категории!')
@@ -160,7 +160,7 @@ def inventory_task_detail(request, pk: int):
         form = input_barcode_form
 
     data = {
-        'title': f'Задание на пересчёт: {inventory_task} №{inventory_task.id} ',
+        'title': f'Задание на пересчёт: {inventory_task} №{inventory_task.pk} ',
         'inventory_item_list': inventory_item_list,
         'task': inventory_task,
         'form': form,
