@@ -31,4 +31,3 @@ class TestBasedModel(TestCase):
             create_action(cls.user, 'Добавление номенклатуры', nom)
             create_action(cls.user, 'Добавление категории', cat)
             create_action(cls.user, 'Добавление страны', country)
-
