@@ -34,6 +34,13 @@ class NomenclatureModelTest(TestBasedModel):
         new_barcode = get_barcode(nom.barcode)
         self.assertEqual(new_barcode, '00000000003')
 
+    def test_get_barcode_lt_eleven_digits(self):
+        nom = Nomenclature.objects.last()
+        nom.barcode = '2'
+        nom.save()
+        new_barcode = get_barcode(nom.barcode)
+        self.assertEqual(new_barcode, '00000000003')
+
     def test_get_new_barcode_gt(self):
         last_barcode = Nomenclature.objects.latest('barcode').barcode
         new_barcode = get_new_barcode()
