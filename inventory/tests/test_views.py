@@ -174,7 +174,6 @@ class InventoryTaskViewTest(TestBasedModel):
     def test_item_update_view_get_success_url(self):
         resp = self.client.post(
             f"/inventory/inventory_item/{self.inv_item.pk}", follow=True)
-        print(resp)
         self.assertRedirects(
             resp, reverse('inventory-task-detail',
                           args=[self.inv_item.inventory_task.pk])
