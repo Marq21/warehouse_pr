@@ -1,5 +1,3 @@
-from django.test import TestCase
-
 from catalog.models import Country, Nomenclature, get_barcode, get_new_barcode
 from warehouse_pr.tests import TestBasedModel
 

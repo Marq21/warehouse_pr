@@ -31,7 +31,7 @@ class ExpirationDateEntity(models.Model):
         verbose_name_plural = "ExpirationDateEntities"
 
     def __str__(self):
-        return f"{self.name} ({self.date_of_expiration})"
+        return f"{self.name}"
 
     def get_absolute_url(self):
         return reverse('date_entity_details', kwargs={'pk': self.pk})
