@@ -41,3 +41,35 @@ class ExpirationDateListViewTest(TestCase):
         resp = self.client.get(
             reverse('expiraion_date_list'), {'quantity_list': ExpirationDateEntity.objects.all()})
         self.assertEqual(resp.status_code, 200)
+
+
+class ExpirationDateDetailViewTest(TestCase):
+    def setUp(self) -> None:
+        User.objects.create_user(
+            'john', 'lennon@thebeatles.com', 'johnpassword')
+        self.user = User.objects.get(username='john')
+        self.client.login(username='john', password='johnpassword')
+        self.nomenclature = Nomenclature.objects.create(
+            name='Test_Nomenclature',
+            cost='10',
+        )
+        self.nom_remain = NomenclatureRemain.objects.create(
+            nomenclature=self.nomenclature,
+        )
+        self.exp_date_entity = ExpirationDateEntity.objects.create(
+            nomenclature_remain=self.nom_remain,
+            date_of_manufacture=datetime.now().strftime("%Y-%m-%d"),
+            date_of_expiration=datetime.now().strftime("%Y-%m-%d"),
+        )
+        return super().setUp()
+
+    def test_exp_date_detail(self):
+        resp = self.client.get(
+            reverse('exp_date_details', kwargs={'pk': self.exp_date_entity.pk}))
+        self.assertEqual(resp.status_code, 200)
+
+    def test_view_exp_date_detail_template_used(self):
+        resp = self.client.get(
+            reverse('exp_date_details', kwargs={'pk': self.exp_date_entity.pk}))
+        self.assertTemplateUsed(
+            resp, 'expiration_dates/exp_date_entity_detail.html')
