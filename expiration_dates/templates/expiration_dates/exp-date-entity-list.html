@@ -14,7 +14,7 @@
           <tr>
              <td>{{ forloop.counter }}</td> 
              <td><a class="td-nomenclature" href="{{ exp_date.get_absolute_url }}">{{ exp_date.name }}</a></td>
-             <td>{{ exp_date.quandity|floatformat }}</td>
+             <td>{{ exp_date.quantity|floatformat }}</td>
              <td>{{ exp_date.date_of_manufacture }}</td>
              <td>{{ exp_date.date_of_expiration }}</td>     
           </tr>

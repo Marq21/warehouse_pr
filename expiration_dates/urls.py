@@ -3,8 +3,10 @@ from . import views
 
 
 urlpatterns = [
-    path('exp_dates_list/', views.ExpirationDatesEntityView.as_view(),
+    path('exp_dates_list/', views.ExpirationDatesEntityListView.as_view(),
          name='expiraion_date_list'),
     path('exp_date_details/<int:pk>/',
-         views.NomenclatureDetailView.as_view(), name='exp_date_details'),
+         views.ExpirationDatesEntityDetailView.as_view(), name='exp_date_details'),
+    path('exp_date_create/',
+         views.AddExpirationDatesEntityView.as_view(), name='exp_date_create'),
 ]
