@@ -1,5 +1,6 @@
 from datetime import datetime
 from django.test import TestCase
+from django.urls import NoReverseMatch, reverse
 
 from expiration_dates.models import ExpirationDateEntity
 from inventory.models import NomenclatureRemain
@@ -35,3 +36,12 @@ class ExpirationDateEntityModelTest(TestCase):
         # save method overwrite name
         self.exp_date_entity.save()
         self.assertEqual(str(self.exp_date_entity), true_name)
+
+    def test_get_absolute_url(self):
+        self.assertEqual(self.exp_date_entity.get_absolute_url(), reverse(
+            'exp_date_details', kwargs={'pk': self.exp_date_entity.pk}))
+
+    def test_get_absolute_url_without_pk(self):
+        with self.assertRaises(NoReverseMatch):
+            reverse(
+                'exp_date_details')
