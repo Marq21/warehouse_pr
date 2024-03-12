@@ -1,0 +1,28 @@
+{% extends 'base_generic.html' %}
+{% block content %}
+    <h1>Список товаров</h1>
+    {% if exp_date_entity_list %}
+    <table class='nom-table'>
+      <tr>
+        <th>№</th>
+        <th>Название</th>
+        <th>Остаток</th>
+        <th>Дата изготовления</th>
+        <th>Срог годности</th>
+      </tr>
+      {% for exp_date in exp_date_entity_list %}
+          <tr>
+             <td>{{ forloop.counter }}</td> 
+             <td><a class="td-nomenclature" href="{{ exp_date.get_absolute_url }}">{{ exp_date.name }}</a></td>
+             <td>{{ exp_date.quandity|floatformat }}</td>
+             <td>{{ exp_date.date_of_manufacture }}</td>
+             <td>{{ exp_date.date_of_expiration }}</td>     
+          </tr>
+      {% endfor %}
+    </table>
+    {% else %}
+      <p>Base is empty</p>
+    {% endif %}
+    {% include 'includes/add_nom_button_href.html'%}
+    <a href="{% url 'nom-search' %}"> Поиск товаров </a>
+{% endblock %}

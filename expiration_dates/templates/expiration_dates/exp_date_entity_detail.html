@@ -1,0 +1,18 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+<div class="noms-detail">
+  <h2>Наименование: {{ expiration_date_entity.name }}<h2>
+
+  <p class="detail-nom-item">Остаток: {{ expiration_date_entity.quantity|floatformat }}</p>
+  <p class="detail-nom-item">Тип товара: {{ expiration_date_entity.date_of_manufacture }}</p>
+  <p class="detail-nom-item">Штрих-код: {{ expiration_date_entity.date_of_expiration }}</p>
+  <br>
+  {% comment %} <p>
+    <a href="{% url 'edit-nomenclature' nomenclature.id %}">
+      Изменить
+    </a>
+  </p> {% endcomment %}
+</div>
+
+{% endblock %}

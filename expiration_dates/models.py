@@ -34,7 +34,7 @@ class ExpirationDateEntity(models.Model):
         return f"{self.name}"
 
     def get_absolute_url(self):
-        return reverse('date_entity_details', kwargs={'pk': self.pk})
+        return reverse('exp_date_details', kwargs={'pk': self.pk})
 
     def save(self, *args, **kwargs):
         self.name = f'{self.nomenclature_remain} ({self.date_of_expiration})'

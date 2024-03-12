@@ -30,6 +30,8 @@ class ExpirationDateEntityModelTest(TestCase):
 
     def test_save_method(self):
         true_name = f'{self.nom_remain} ({self.exp_date_entity.date_of_expiration})'
+        # Trying to give random name
         self.exp_date_entity.name = 'jafsjasfj'
+        # save method overwrite name
         self.exp_date_entity.save()
         self.assertEqual(str(self.exp_date_entity), true_name)
