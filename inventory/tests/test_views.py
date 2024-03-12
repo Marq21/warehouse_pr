@@ -5,7 +5,7 @@ from inventory.models import InventoryItem, InventoryTask, NomenclatureRemain
 from catalog.models import Category, Nomenclature
 from inventory.forms import CreateInventoryTaskForm, InputBarcodeForm, UpdateStatusForm
 from django.contrib import messages
-from inventory.views import CreateInventoryTask, inventory_task_confirm, inventory_task_detail
+from inventory.views import CreateInventoryTask
 
 from warehouse_pr.tests import TestBasedModel
 
