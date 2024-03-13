@@ -130,17 +130,15 @@ class NomenclatureDetailView(LoginRequiredMixin, generic.DetailView):
     model = Nomenclature
 
 
-@login_required(login_url='/login/')
-def show_category(request, cat_slug):
-    category = get_object_or_404(Category, slug=cat_slug)
-    nomenclatures = Nomenclature.objects.filter(category_id=category.pk)
-    data = {
-        'title': f'Категория товара: {category.name}',
-        'noms': nomenclatures,
-        'cat_selected': category.pk,
-    }
-    return render(request, 'catalog/category.html', data)
+class DeleteCategoryView(LoginRequiredMixin, generic.DeleteView):
+    model = Category
+    success_url = reverse_lazy('list-category')
+    template_name = "catalog/delete_category.html"
 
+    def get_context_data(self, **kwargs) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context["title"] = "Удалить категорию"
+        return context
 
 class CountryListView(LoginRequiredMixin, generic.ListView):
     model = Country

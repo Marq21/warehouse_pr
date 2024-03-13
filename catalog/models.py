@@ -6,7 +6,7 @@ from .utils import slugify
 
 class Country(models.Model):
     name = models.CharField(max_length=100)
-    
+
     class Meta:
         ordering = ["name"]
 
@@ -15,7 +15,8 @@ class Country(models.Model):
 
     def get_absolute_url(self):
         return reverse('country-detail', args={self.pk})
-    
+
+
 class Category(models.Model):
     name = models.CharField(max_length=100, db_index=True, )
     slug = models.SlugField(max_length=255, unique=True, db_index=True)
@@ -29,7 +30,7 @@ class Category(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('category', kwargs={'cat_slug': self.slug})
+        return reverse('category-details', kwargs={'slug': self.slug})
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
@@ -84,7 +85,8 @@ class Nomenclature(models.Model):
 
     class Meta:
         ordering = ["name", "-cost"]
-        indexes = [models.Index(fields=["-cost"]), models.Index(fields=["barcode"]), ]
+        indexes = [models.Index(fields=["-cost"]),
+                   models.Index(fields=["barcode"]), ]
         verbose_name_plural = "Nomenclatures"
 
     def __str__(self):
@@ -104,6 +106,7 @@ def get_barcode(barcode=00000000000):
     result = ['0' for _ in range(11)]
     result[-place_for_number:] = str(parse_int)
     return ''.join(result)
+
 
 def get_new_barcode():
     barcode = Nomenclature.objects.latest('barcode').barcode

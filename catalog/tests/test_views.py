@@ -144,7 +144,7 @@ class CategoryViewTest(TestBasedModel):
         self.client.login(username='john', password='johnpassword')
         cat_slug = Category.objects.last().slug
         resp = self.client.get(
-            f'/catalog/category/{cat_slug}')
+            reverse('category-details', kwargs={'slug': cat_slug}))
         self.assertEqual(resp.status_code, 200)
 
     def test_create_view_POST_success_form_valid(self):

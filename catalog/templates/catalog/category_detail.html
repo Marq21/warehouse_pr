@@ -8,9 +8,16 @@
 
     <br>
     <p>
-      <a href="{% url 'edit-category' category.id %}">
-        Изменить
-      </a>
+      <button class="btn btn-warning">
+        <a class="delete-href" href="{% url 'edit-category' category.pk %}">
+          Изменить
+        </a>
+      </button>  
+      <button class="btn btn-danger">    
+        <a class="delete-href" href="{% url 'delete_category' category.pk %}">
+          Удалить
+        </a>
+      </button>
     </p>
   </div>
 {% endblock %}

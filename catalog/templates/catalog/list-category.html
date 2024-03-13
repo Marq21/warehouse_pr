@@ -10,7 +10,7 @@
             <li>
                 <a href="{{ cat.get_absolute_url }}"> {{cat.name}}</a> 
                 <a class="list_category_change_btn" href="{% url 'edit-category' cat.id %}">| изменить </a>
-                <a href="{% url 'category-detail' cat.id %}">| детальнее </a>
+                <a href="{% url 'category-details' cat.slug %}">| детальнее </a>
             </li>          
         {% endfor %}
     </ul>

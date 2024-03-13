@@ -224,4 +224,4 @@ class TestDeleteExpirationDatesEntityView(TestCase):
         self.assertEqual(
             resp.context_data['title'], "Удалить срок годности")
         self.assertFalse(
-            resp.context_data['title'], "")
+            resp.context_data['title'] == "")
