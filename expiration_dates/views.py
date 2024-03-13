@@ -1,3 +1,4 @@
+from typing import Any
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
@@ -62,3 +63,14 @@ class EditExpirationDatesEntityView(LoginRequiredMixin,  generic.UpdateView):
     def form_invalid(self, form):
         messages.error(self.request, 'Page update failed')
         return super(EditExpirationDatesEntityView, self).form_invalid(form)
+
+
+class DeleteExpirationDatesEntityView(LoginRequiredMixin, generic.DeleteView):
+    model = ExpirationDateEntity
+    success_url = reverse_lazy('expiraion_date_list')
+    template_name = "expiration_dates/delete_expiration_date.html"
+
+    def get_context_data(self, **kwargs) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context["title"] = "Удалить срок годности"
+        return context
