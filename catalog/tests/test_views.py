@@ -112,6 +112,16 @@ class NomenclatureViewTest(TestBasedModel):
         self.assertFalse(Nomenclature.objects.get(
             name='New_Nom_Name') == name_for_compare_in_assert)
 
+    def test_delete_view_get_context(self):
+        nom = Nomenclature.objects.last()
+        resp = self.client.get(reverse('delete_nomenclature', kwargs={
+                               'slug': nom.slug}))
+        resp.user = self.user
+        self.assertIsInstance(resp.context_data, dict)
+        self.assertEqual(
+            resp.context_data['title'], "Удалить номенклатуру")
+        self.assertFalse(
+            resp.context_data['title'] == "")
 
 class CategoryViewTest(TestBasedModel):
 
@@ -191,6 +201,17 @@ class CategoryViewTest(TestBasedModel):
         edit_view = EditCategory(object=cat)
         edit_view.setup(request)
         self.assertTrue(edit_view.form_invalid(form=form))
+
+    def test_delete_view_get_context(self):
+        cat = Category.objects.last()
+        resp = self.client.get(reverse('delete_category', kwargs={
+                               'pk': cat.pk}))
+        resp.user = self.user
+        self.assertIsInstance(resp.context_data, dict)
+        self.assertEqual(
+            resp.context_data['title'], "Удалить категорию")
+        self.assertFalse(
+            resp.context_data['title'] == "")
 
 
 class CountryViewTest(TestBasedModel):

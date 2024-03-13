@@ -1,18 +1,1 @@
-{% extends 'base_generic.html' %}
-
-{% block title %}
-      <title>{{title}}</title>
-{% endblock %}
- 
-{% block content %}
-
-    <h1>{{ title }}</h1>
-    <div class="form-fields"> 
-        <form method="post">
-            {% csrf_token %}
-            <p>Удалить {{ object }}?
-            <input class="btn btn-danger" type="submit" value="Удалить">
-        </form>
-    </div>
-
-{% endblock %}
+{% include "includes/delete_entity_base.html" %}

@@ -84,6 +84,17 @@ class EditNomenclature(LoginRequiredMixin, UpdateView):
         return super(EditNomenclature, self).form_invalid(form)
 
 
+class DeleteNomenclatureView(LoginRequiredMixin, generic.DeleteView):
+    model = Nomenclature
+    success_url = reverse_lazy('nomenclature-list-view')
+    template_name = "catalog/delete_nomenclature.html"
+
+    def get_context_data(self, **kwargs) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context["title"] = "Удалить номенклатуру"
+        return context
+
+
 class EditCategory(LoginRequiredMixin, UpdateView):
     model = Category
     form_class = AddCategoryForm
@@ -139,6 +150,7 @@ class DeleteCategoryView(LoginRequiredMixin, generic.DeleteView):
         context = super().get_context_data(**kwargs)
         context["title"] = "Удалить категорию"
         return context
+
 
 class CountryListView(LoginRequiredMixin, generic.ListView):
     model = Country

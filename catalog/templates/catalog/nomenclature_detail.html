@@ -11,9 +11,17 @@
   <p class="detail-nom-item">Страна изготовления: {{ nomenclature.country_made_id }}</p>
   <br>
   <p>
-    <a href="{% url 'edit-nomenclature' nomenclature.id %}">
-      Изменить
-    </a>
+    <button class="btn btn-warning">
+      <a class="delete-href" href="{% url 'edit-nomenclature' nomenclature.pk %}">
+        Изменить
+      </a>
+    </button>  
+    <a>
+    <button class="btn btn-danger">    
+      <a class="delete-href" href="{% url 'delete_nomenclature' nomenclature.slug %}">
+        Удалить
+      </a>
+    </button>
   </p>
   <p>
     <a href="{% url 'nom_share' nomenclature.id %}">

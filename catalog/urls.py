@@ -4,6 +4,7 @@ from . import views
 
 urlpatterns = [
     path('', views.NomenclatureHome.as_view(), name='home'),
+
     path('nomenclature/<slug:slug>/',
          views.NomenclatureDetailView.as_view(), name='noms-detail'),
     path('nomenclature_list/', views.NomenclatureListView.as_view(),
@@ -12,6 +13,8 @@ urlpatterns = [
          name='add-nomenclature'),
     path('edit_nomenclature/<int:pk>',
          views.EditNomenclature.as_view(), name='edit-nomenclature'),
+    path('delete_nomenclature/<slug:slug>', views.DeleteNomenclatureView.as_view(),
+         name='delete_nomenclature'),
 
     path('category_details/<slug:slug>/',
          views.CategoryDetailView.as_view(), name='category-details'),
