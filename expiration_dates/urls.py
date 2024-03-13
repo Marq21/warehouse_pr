@@ -9,4 +9,6 @@ urlpatterns = [
          views.ExpirationDatesEntityDetailView.as_view(), name='exp_date_details'),
     path('exp_date_create/',
          views.AddExpirationDatesEntityView.as_view(), name='exp_date_create'),
+    path('edit_expiration_date/<int:pk>/',
+         views.EditExpirationDatesEntityView.as_view(), name='edit_exp_date'),
 ]

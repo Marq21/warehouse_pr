@@ -24,7 +24,7 @@ class ExpirationDatesEntityDetailView(LoginRequiredMixin, generic.DetailView):
 
 class AddExpirationDatesEntityView(LoginRequiredMixin, generic.CreateView):
     form_class = AddExpirationDatesEntityForm
-    template_name = 'expiration_dates/add_expiration_dates_enitity.html'
+    template_name = 'expiration_dates/add_expiration_dates_entity.html'
     success_url = reverse_lazy('expiraion_date_list')
     extra_context = {
         'title': 'Добавление срока годности для партии',
@@ -38,3 +38,27 @@ class AddExpirationDatesEntityView(LoginRequiredMixin, generic.CreateView):
                       'Добавление срока годности', exp_date_enitity)
         messages.success(self.request, 'Добавление срока годности: успешно')
         return super(AddExpirationDatesEntityView, self).form_valid(form)
+
+
+class EditExpirationDatesEntityView(LoginRequiredMixin,  generic.UpdateView):
+    model = ExpirationDateEntity
+    form_class = AddExpirationDatesEntityForm
+    template_name = 'expiration_dates/add_expiration_dates_entity.html'
+    extra_context = {
+        'title': 'Изменение сроков годности'
+    }
+
+    def get_success_url(self, **kwargs):
+        return reverse_lazy('exp_date_details', args=(self.object.pk,))
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        exp_date = form.save(commit=False)
+        form.save()
+        create_action(self.request.user, 'Изменение сроков годности', exp_date)
+        messages.success(self.request, 'Изменение сроков годности: успешно')
+        return super(EditExpirationDatesEntityView, self).form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, 'Page update failed')
+        return super(EditExpirationDatesEntityView, self).form_invalid(form)
