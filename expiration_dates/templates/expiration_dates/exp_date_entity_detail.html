@@ -8,11 +8,19 @@
   <p class="detail-nom-item">Тип товара: {{ expiration_date_entity.date_of_manufacture }}</p>
   <p class="detail-nom-item">Штрих-код: {{ expiration_date_entity.date_of_expiration }}</p>
   <br>
-  {% comment %} <p>
-    <a href="{% url 'edit-nomenclature' nomenclature.id %}">
-      Изменить
-    </a>
-  </p> {% endcomment %}
+  <p>
+    <button class="btn btn-warning">
+      <a class="delete-href" href="{% url 'edit_exp_date' expiration_date_entity.pk %}">
+        Изменить
+      </a>
+    </button>  
+    <a>
+    <button class="btn btn-danger">    
+      <a class="delete-href" href="{% url 'delete_exp_date' expiration_date_entity.pk %}">
+        Удалить
+      </a>
+    </button>
+  </p>
 </div>
 
 {% endblock %}

@@ -26,7 +26,7 @@ class ExpirationDatesEntityDetailView(LoginRequiredMixin, generic.DetailView):
 class AddExpirationDatesEntityView(LoginRequiredMixin, generic.CreateView):
     form_class = AddExpirationDatesEntityForm
     template_name = 'expiration_dates/add_expiration_dates_entity.html'
-    success_url = reverse_lazy('expiraion_date_list')
+    success_url = reverse_lazy('expiration_date_list')
     extra_context = {
         'title': 'Добавление срока годности для партии',
     }
@@ -67,7 +67,7 @@ class EditExpirationDatesEntityView(LoginRequiredMixin,  generic.UpdateView):
 
 class DeleteExpirationDatesEntityView(LoginRequiredMixin, generic.DeleteView):
     model = ExpirationDateEntity
-    success_url = reverse_lazy('expiraion_date_list')
+    success_url = reverse_lazy('expiration_date_list')
     template_name = "expiration_dates/delete_expiration_date.html"
 
     def get_context_data(self, **kwargs) -> dict[str, Any]:

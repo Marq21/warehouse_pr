@@ -41,7 +41,7 @@ class ExpirationDateListViewTest(TestCase):
 
     def test_home_view(self):
         resp = self.client.get(
-            reverse('expiraion_date_list'), {'quantity_list': ExpirationDateEntity.objects.all()})
+            reverse('expiration_date_list'), {'quantity_list': ExpirationDateEntity.objects.all()})
         self.assertEqual(resp.status_code, 200)
 
 
