@@ -188,3 +188,40 @@ class TestEditExpirationDatesEntityView(TestCase):
         self.assertTrue(view.form_valid(form=form))
         self.assertFalse(self.exp_date_entity.quantity ==
                          quantity_for_compare_in_assert)
+
+
+class TestDeleteExpirationDatesEntityView(TestCase):
+    def setUp(self) -> None:
+        self.factory = RequestFactory()
+        User.objects.create_user(
+            'john', 'lennon@thebeatles.com', 'johnpassword')
+        self.user = User.objects.get(username='john')
+        self.client.login(username='john', password='johnpassword')
+        self.nomenclature = Nomenclature.objects.create(
+            name='Test_Nomenclature',
+            cost='10',
+        )
+        self.nom_remain = NomenclatureRemain.objects.create(
+            nomenclature=self.nomenclature,
+        )
+        self.exp_date_entity = ExpirationDateEntity.objects.create(
+            nomenclature_remain=self.nom_remain,
+            date_of_manufacture=datetime.now().strftime("%Y-%m-%d"),
+            date_of_expiration=datetime.now().strftime("%Y-%m-%d"),
+        )
+        return super().setUp()
+
+    def test_delete_exp_date_by_status_code(self):
+        resp = self.client.post(
+            reverse('delete_exp_date', kwargs={'pk': self.exp_date_entity.pk}))
+        self.assertEqual(resp.status_code, 302)
+
+    def test_delete_view_get_context(self):
+        resp = self.client.get(reverse('delete_exp_date', kwargs={
+                               'pk': self.exp_date_entity.pk}))
+        resp.user = self.user
+        self.assertIsInstance(resp.context_data, dict)
+        self.assertEqual(
+            resp.context_data['title'], "Удалить срок годности")
+        self.assertFalse(
+            resp.context_data['title'], "")
