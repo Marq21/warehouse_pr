@@ -31,11 +31,11 @@ class ExpirationDateListViewTest(TestCase):
         return super().setUp()
 
     def test_view_url_exists_at_desired_location(self):
-        resp = self.client.get(reverse('expiraion_date_list'))
+        resp = self.client.get(reverse('expiration_date_list'))
         self.assertEqual(resp.status_code, 200)
 
     def test_view_nom_list_template_used(self):
-        resp = self.client.get(reverse('expiraion_date_list'))
+        resp = self.client.get(reverse('expiration_date_list'))
         self.assertTemplateUsed(
             resp, 'expiration_dates/exp-date-entity-list.html')
 
