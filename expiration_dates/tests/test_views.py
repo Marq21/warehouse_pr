@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date, datetime, timedelta
 from django.test import RequestFactory, TestCase
 from django.contrib.auth.models import User
 from django.urls import reverse
@@ -6,7 +6,7 @@ from django.contrib import messages
 from catalog.models import Nomenclature
 from expiration_dates.models import ExpirationDateEntity
 from inventory.models import NomenclatureRemain
-from expiration_dates.forms import AddExpirationDatesEntityForm
+from expiration_dates.forms import AddExpirationDatesEntityForm, LimitToExpirationDateForm
 from expiration_dates.views import AddExpirationDatesEntityView, EditExpirationDatesEntityView
 
 
@@ -225,3 +225,42 @@ class TestDeleteExpirationDatesEntityView(TestCase):
             resp.context_data['title'], "Удалить срок годности")
         self.assertFalse(
             resp.context_data['title'] == "")
+
+
+class TestGetNearestExpirationDatesView(TestCase):
+    def setUp(self) -> None:
+        self.factory = RequestFactory()
+        User.objects.create_user(
+            'john', 'lennon@thebeatles.com', 'johnpassword')
+        self.user = User.objects.get(username='john')
+        self.client.login(username='john', password='johnpassword')
+        self.nomenclature = Nomenclature.objects.create(
+            name='Test_Nomenclature',
+            cost='10',
+        )
+        self.nom_remain = NomenclatureRemain.objects.create(
+            nomenclature=self.nomenclature,
+        )
+        self.exp_date_entity1 = ExpirationDateEntity.objects.create(
+            nomenclature_remain=self.nom_remain,
+            date_of_manufacture=datetime.now().strftime("%Y-%m-%d"),
+            date_of_expiration=date.today() + timedelta(days=5),
+        )
+        self.exp_date_entity2 = ExpirationDateEntity.objects.create(
+            nomenclature_remain=self.nom_remain,
+            date_of_manufacture=datetime.now().strftime("%Y-%m-%d"),
+            date_of_expiration=date.today() + timedelta(days=20),
+        )
+
+    def test_get_status(self):
+        resp = self.client.get(
+            reverse('exp_date_nearest_entity_list'))
+        self.assertEqual(resp.status_code, 200)
+
+    def test_post_status(self):
+        resp = self.client.post(
+            reverse('exp_date_nearest_entity_list'), data={'days_to_expiration': 20})
+        self.assertEqual(resp.status_code, 200)
+        self.assertIsInstance(
+            resp.context['is_nearest_expiration_value'], list)
+        self.assertIsInstance(resp.context['form'], LimitToExpirationDateForm)
