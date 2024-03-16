@@ -27,6 +27,11 @@
       <a class="delete-href" href="{% url 'exp_date_create' %}">
         Добавить сроки
       </a>
+    </button>
+    <button class="btn btn-primary">
+      <a class="delete-href" href="{% url 'exp_date_nearest_entity_list' %}">
+        Отчет по истекающим срокам годности
+      </a>
     </button> 
     <a href="{% url 'nom-search' %}"> Поиск товаров </a>
 {% endblock %}

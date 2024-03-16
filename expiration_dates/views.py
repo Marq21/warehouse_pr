@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 from typing import Any
 from django.db.models.query import QuerySet
 from django.shortcuts import render
@@ -81,6 +81,9 @@ class DeleteExpirationDatesEntityView(LoginRequiredMixin, generic.DeleteView):
 def get_nearest_expiration_dates(request):
 
     exp_date_nearest_entity_list = []
+    # List of boolean values that less than five days to expiration
+    is_nearest_expiration_value = []
+
     context = {}
 
     if request.method == 'POST':
@@ -93,11 +96,18 @@ def get_nearest_expiration_dates(request):
                     datetime.now() + timedelta(
                         days=form.cleaned_data['days_to_expiration']
                     )))
+
+            for exp_date in exp_date_nearest_entity_list:
+                if exp_date.date_of_expiration <= (date.today() + timedelta(days=5)):
+                    is_nearest_expiration_value.append((exp_date, True))
+                else:
+                    is_nearest_expiration_value.append((exp_date, False))
+
     else:
         form = LimitToExpirationDateForm()
 
     context = {
-        'exp_date_nearest_entity_list': exp_date_nearest_entity_list,
+        'is_nearest_expiration_value': is_nearest_expiration_value,
         'form': form,
     }
 
