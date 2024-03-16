@@ -5,8 +5,8 @@
   <h2>Наименование: {{ expiration_date_entity.name }}<h2>
 
   <p class="detail-nom-item">Остаток: {{ expiration_date_entity.quantity|floatformat }}</p>
-  <p class="detail-nom-item">Тип товара: {{ expiration_date_entity.date_of_manufacture }}</p>
-  <p class="detail-nom-item">Штрих-код: {{ expiration_date_entity.date_of_expiration }}</p>
+  <p class="detail-nom-item">Дата изготовления: {{ expiration_date_entity.date_of_manufacture }}</p>
+  <p class="detail-nom-item">Срок годности: {{ expiration_date_entity.date_of_expiration }}</p>
   <br>
   <p>
     <button class="btn btn-warning">

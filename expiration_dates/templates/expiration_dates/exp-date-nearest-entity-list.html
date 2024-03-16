@@ -19,7 +19,7 @@
         {% for date_tuple_item in is_nearest_expiration_value %}
             <tr>
                 <td>{{ forloop.counter }}</td> 
-                <td><a class="td-nomenclature" href="{{ exp_date.get_absolute_url }}">{{ date_tuple_item.0.name }}</a></td>
+                <td><a class="td-nomenclature" href="{{ date_tuple_item.0.get_absolute_url }}">{{ date_tuple_item.0.name }}</a></td>
                 <td>{{ date_tuple_item.0.quantity|floatformat }}</td>
                 <td>{{ date_tuple_item.0.date_of_manufacture }}</td>
                 {% if date_tuple_item.1 %}

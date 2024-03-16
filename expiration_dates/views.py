@@ -95,7 +95,7 @@ def get_nearest_expiration_dates(request):
                 date_of_expiration__lte=(
                     datetime.now() + timedelta(
                         days=form.cleaned_data['days_to_expiration']
-                    )))
+                    ))).order_by('date_of_expiration')
 
             for exp_date in exp_date_nearest_entity_list:
                 if exp_date.date_of_expiration <= (date.today() + timedelta(days=5)):
