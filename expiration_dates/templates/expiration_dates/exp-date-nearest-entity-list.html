@@ -1,0 +1,33 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+    <form action="" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+        <p><button type="submit">Создать отчёт</button></p>
+    </form>
+    <h1>Список товаров с истекающим сроком</h1>
+    {% if exp_date_nearest_entity_list %}
+        <table class='nom-table'>
+        <tr>
+            <th>№</th>
+            <th>Название</th>
+            <th>Остаток</th>
+            <th>Дата изготовления</th>
+            <th>Срог годности</th>
+        </tr>
+        {% for exp_date in exp_date_nearest_entity_list %}
+            <tr>
+                <td>{{ forloop.counter }}</td> 
+                <td><a class="td-nomenclature" href="{{ exp_date.get_absolute_url }}">{{ exp_date.name }}</a></td>
+                <td>{{ exp_date.quantity|floatformat }}</td>
+                <td>{{ exp_date.date_of_manufacture }}</td>
+                <td>{{ exp_date.date_of_expiration }}</td>     
+            </tr>
+        {% endfor %}
+        </table>
+    {% else %}
+      <p>Товаров с таким истеающим сроком нет в базе данных</p>
+    {% endif %}
+    <a href="{% url 'nom-search' %}"> Поиск товаров </a>
+{% endblock %}

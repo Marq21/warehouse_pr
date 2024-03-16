@@ -23,6 +23,10 @@
     {% else %}
       <p>Base is empty</p>
     {% endif %}
-    {% include 'includes/add_nom_button_href.html'%}
+    <button class="btn btn-success">
+      <a class="delete-href" href="{% url 'exp_date_create' %}">
+        Добавить сроки
+      </a>
+    </button> 
     <a href="{% url 'nom-search' %}"> Поиск товаров </a>
 {% endblock %}

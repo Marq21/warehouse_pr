@@ -1,4 +1,6 @@
+from datetime import datetime, timedelta
 from typing import Any
+from django.db.models.query import QuerySet
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
@@ -7,7 +9,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 from expiration_dates.models import ExpirationDateEntity
 from actions.utils import create_action
-from expiration_dates.forms import AddExpirationDatesEntityForm
+from expiration_dates.forms import AddExpirationDatesEntityForm, LimitToExpirationDateForm
 
 
 class ExpirationDatesEntityListView(generic.ListView):
@@ -74,3 +76,29 @@ class DeleteExpirationDatesEntityView(LoginRequiredMixin, generic.DeleteView):
         context = super().get_context_data(**kwargs)
         context["title"] = "Удалить срок годности"
         return context
+
+
+def get_nearest_expiration_dates(request):
+
+    exp_date_nearest_entity_list = []
+    context = {}
+
+    if request.method == 'POST':
+        form = LimitToExpirationDateForm(request.POST)
+
+        if form.is_valid():
+            exp_date_nearest_entity_list = ExpirationDateEntity.objects.filter(
+                date_of_expiration__gt=datetime.now() + timedelta(days=2),
+                date_of_expiration__lte=(
+                    datetime.now() + timedelta(
+                        days=form.cleaned_data['days_to_expiration']
+                    )))
+    else:
+        form = LimitToExpirationDateForm()
+
+    context = {
+        'exp_date_nearest_entity_list': exp_date_nearest_entity_list,
+        'form': form,
+    }
+
+    return render(request, 'expiration_dates/exp-date-nearest-entity-list.html', context)

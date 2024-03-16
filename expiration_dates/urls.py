@@ -11,6 +11,8 @@ urlpatterns = [
          views.AddExpirationDatesEntityView.as_view(), name='exp_date_create'),
     path('edit_expiration_date/<int:pk>/',
          views.EditExpirationDatesEntityView.as_view(), name='edit_exp_date'),
-    path('delete_expiration_date/<int:pk>',
+    path('delete_expiration_date/<int:pk>/',
          views.DeleteExpirationDatesEntityView.as_view(), name='delete_exp_date'),
+    path('get_nearest_expiration_date/',
+         views.get_nearest_expiration_dates, name='exp_date_nearest_entity_list'),
 ]
