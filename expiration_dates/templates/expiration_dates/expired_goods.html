@@ -1,0 +1,35 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+    <form action="" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+        <p><button class="btn btn-primary" type="submit">Проверить СГ</button></p>
+    </form>
+    <h1>Список товаров с просроченным сроком годности</h1>
+    {% if expired_goods_list %}
+        <table class='nom-table'>
+        <tr>
+            <th>№</th>
+            <th>Название</th>
+            <th>Остаток</th>
+            <th>Дата изготовления</th>
+            <th>Срог годности</th>
+        </tr>
+        {% for exp_date in expired_goods_list %}
+            <tr>
+                <td>{{ forloop.counter }}</td> 
+                <td><a class="td-nomenclature" href="{{ date_tuple_item.0.get_absolute_url }}">{{ exp_date.name }}</a></td>
+                <td>{{ exp_date.quantity|floatformat }}</td>
+                <td>{{ exp_date.date_of_manufacture }}</td>
+                <td style='color: red'> {{ exp_date.date_of_expiration }} </td>  
+            </tr>
+        {% endfor %}
+        </table>
+    {% else %}
+      <p>В базе данных нет просроченного товара</p>
+    {% endif %}
+    <a href="{% url 'home' %}">На главную </a>
+    <a href="{% url 'expiration_date_list' %}"> К срокам годности </a>
+    <a href="{% url 'nom-search' %}"> Поиск товаров </a>
+{% endblock %}

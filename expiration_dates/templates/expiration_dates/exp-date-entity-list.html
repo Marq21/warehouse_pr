@@ -33,5 +33,10 @@
         Отчет по истекающим срокам годности
       </a>
     </button> 
+    <button class="btn btn-primary">
+      <a class="delete-href" href="{% url 'exp_expired_goods' %}">
+        Проверить просроченный товар
+      </a>
+    </button> 
     <a href="{% url 'nom-search' %}"> Поиск товаров </a>
 {% endblock %}

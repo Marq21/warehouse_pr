@@ -23,3 +23,6 @@ class AddExpirationDatesEntityForm(forms.ModelForm):
 class LimitToExpirationDateForm(forms.Form):
     days_to_expiration = forms.IntegerField(
         initial=20, label="Введите количество дней до истечения срока годности")
+
+class ExpiredGoodsForm(forms.Form):
+    ...

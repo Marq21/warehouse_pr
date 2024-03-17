@@ -9,7 +9,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 from expiration_dates.models import ExpirationDateEntity
 from actions.utils import create_action
-from expiration_dates.forms import AddExpirationDatesEntityForm, LimitToExpirationDateForm
+from expiration_dates.forms import AddExpirationDatesEntityForm, ExpiredGoodsForm, LimitToExpirationDateForm
 
 
 class ExpirationDatesEntityListView(generic.ListView):
@@ -84,8 +84,6 @@ def get_nearest_expiration_dates(request):
     # List of boolean values that less than five days to expiration
     is_nearest_expiration_value = []
 
-    context = {}
-
     if request.method == 'POST':
         form = LimitToExpirationDateForm(request.POST)
 
@@ -112,3 +110,24 @@ def get_nearest_expiration_dates(request):
     }
 
     return render(request, 'expiration_dates/exp-date-nearest-entity-list.html', context)
+
+
+def get_expired_goods(request):
+
+    expired_goods_list = []
+
+    if request.method == 'POST':
+        form = ExpiredGoodsForm(request.POST)
+        expired_goods_list = ExpirationDateEntity.objects.filter(
+            date_of_expiration__lte=(
+                datetime.now()
+            )).order_by('date_of_expiration')
+    else:
+        form = ExpiredGoodsForm()
+
+    context = {
+        'expired_goods_list': expired_goods_list,
+        'form': form,
+    }
+
+    return render(request, 'expiration_dates/expired_goods.html', context)
