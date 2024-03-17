@@ -10,6 +10,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from expiration_dates.models import ExpirationDateEntity
 from actions.utils import create_action
 from expiration_dates.forms import AddExpirationDatesEntityForm, ExpiredGoodsForm, LimitToExpirationDateForm
+from expiration_dates.utils import validate_dates
 
 
 class ExpirationDatesEntityListView(generic.ListView):
@@ -36,10 +37,20 @@ class AddExpirationDatesEntityView(LoginRequiredMixin, generic.CreateView):
     def form_valid(self, form):
         form.instance.user = self.request.user
         exp_date_enitity = form.save(commit=False)
+        result_validation = validate_dates(exp_date_enitity)
         form.save()
         create_action(self.request.user,
                       'Добавление срока годности', exp_date_enitity)
-        messages.success(self.request, 'Добавление срока годности: успешно')
+        if result_validation:
+            result_message = f"""Срок годности не может быть меньше даты производства.
+                                Установлены параметры по умолчанию: \n
+                                Дата производства: {exp_date_enitity.date_of_manufacture}\n 
+                                Срок годности: {exp_date_enitity.date_of_expiration}
+                            """
+            messages.success(self.request, result_message)
+        else:
+            messages.success(
+                self.request, 'Добавление срока годности: успешно')
         return super(AddExpirationDatesEntityView, self).form_valid(form)
 
 
@@ -57,9 +68,19 @@ class EditExpirationDatesEntityView(LoginRequiredMixin,  generic.UpdateView):
     def form_valid(self, form):
         form.instance.user = self.request.user
         exp_date = form.save(commit=False)
+        result_validation = validate_dates(exp_date)
         form.save()
+        if result_validation:
+            result_message = f"""Срок годности не может быть меньше даты производства.
+                                Установлены параметры по умолчанию: \n
+                                Дата производства: {exp_date.date_of_manufacture}\n 
+                                Срок годности: {exp_date.date_of_expiration}
+                            """
+            messages.success(self.request, result_message)
+        else:
+            messages.success(
+                self.request, 'Изменение срока годности: успешно')
         create_action(self.request.user, 'Изменение сроков годности', exp_date)
-        messages.success(self.request, 'Изменение сроков годности: успешно')
         return super(EditExpirationDatesEntityView, self).form_valid(form)
 
     def form_invalid(self, form):
