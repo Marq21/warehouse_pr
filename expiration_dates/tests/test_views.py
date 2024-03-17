@@ -129,6 +129,31 @@ class ExpirationDateCreateViewTest(TestCase):
             date_of_expiration=date_of_expiration
         ))
 
+    def test_create_view_POST_success_form_valid_with_validate_dates(self):
+        date_of_manufacture = datetime(2002, 10, 13).strftime("%Y-%m-%d")
+        date_of_expiration = datetime(2001, 10, 13).strftime("%Y-%m-%d")
+        date_of_manufacture_after_validation = date.today()
+        date_of_expiration_after_validation = date.today() + timedelta(days=20)
+        data = {
+            'nomenclature_remain': self.nom_remain,
+            'quantity': 524334,
+            'date_of_manufacture': date_of_manufacture,
+            'date_of_expiration': date_of_expiration,
+        }
+
+        form = AddExpirationDatesEntityForm(data)
+        request = self.factory.post(reverse('exp_date_create'), data=data)
+        request.user = self.user
+        request._messages = messages.storage.default_storage(request)
+        add_view = AddExpirationDatesEntityView()
+        add_view.setup(request)
+        self.assertTrue(add_view.form_valid(form=form))
+        self.assertTrue(ExpirationDateEntity.objects.get(
+            quantity=524334,
+            date_of_manufacture=date_of_manufacture_after_validation,
+            date_of_expiration=date_of_expiration_after_validation
+        ))
+
 
 class TestEditExpirationDatesEntityView(TestCase):
     def setUp(self) -> None:
@@ -148,6 +173,11 @@ class TestEditExpirationDatesEntityView(TestCase):
             nomenclature_remain=self.nom_remain,
             date_of_manufacture=datetime.now().strftime("%Y-%m-%d"),
             date_of_expiration=datetime.now().strftime("%Y-%m-%d"),
+        )
+        self.exp_date_entity1 = ExpirationDateEntity.objects.create(
+            nomenclature_remain=self.nom_remain,
+            date_of_manufacture=datetime.now(),
+            date_of_expiration=datetime.now() - timedelta(days=20),
         )
         return super().setUp()
 
@@ -188,6 +218,28 @@ class TestEditExpirationDatesEntityView(TestCase):
         view.setup(request)
         self.assertTrue(view.form_valid(form=form))
         self.assertFalse(self.exp_date_entity.quantity ==
+                         quantity_for_compare_in_assert)
+
+    def test_update_view_POST_success_form_valid_with_validate_date(self):
+        quantity_for_compare_in_assert = self.exp_date_entity1.name
+        date_of_manufacture = datetime(2002, 10, 13).strftime("%Y-%m-%d")
+        date_of_expiration = datetime(2001, 10, 13).strftime("%Y-%m-%d")
+        data = {
+            'nomenclature_remain': self.nom_remain,
+            'quantity': 10,
+            'date_of_manufacture': date_of_manufacture,
+            'date_of_expiration': date_of_expiration,
+        }
+
+        form = AddExpirationDatesEntityForm(data)
+        request = self.factory.post(
+            reverse('edit_exp_date', kwargs={'pk': self.exp_date_entity1.pk}), data=data)
+        request.user = self.user
+        request._messages = messages.storage.default_storage(request)
+        view = EditExpirationDatesEntityView(object=self.exp_date_entity1)
+        view.setup(request)
+        self.assertTrue(view.form_valid(form=form))
+        self.assertFalse(self.exp_date_entity1.quantity ==
                          quantity_for_compare_in_assert)
 
 
