@@ -154,6 +154,11 @@ class ExpirationDateCreateViewTest(TestCase):
             date_of_expiration=date_of_expiration_after_validation
         ))
 
+    def test_view_template_used(self):
+        resp = self.client.get(reverse('exp_date_create'))
+        self.assertTemplateUsed(
+            resp, 'expiration_dates/add_expiration_dates_entity.html')
+
 
 class TestEditExpirationDatesEntityView(TestCase):
     def setUp(self) -> None:
