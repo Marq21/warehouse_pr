@@ -290,6 +290,12 @@ class TestDeleteExpirationDatesEntityView(TestCase):
         self.assertFalse(
             resp.context_data['title'] == "")
 
+    def test_view_template_used(self):
+        resp = self.client.get(reverse('delete_exp_date', kwargs={
+                               'pk': self.exp_date_entity.pk}))
+        self.assertTemplateUsed(
+            resp, 'expiration_dates/delete_expiration_date.html')
+
 
 class TestGetNearestExpirationDatesView(TestCase):
     def setUp(self) -> None:
