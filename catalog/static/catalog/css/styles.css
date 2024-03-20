@@ -73,7 +73,7 @@ h2 {
 /* SIDEBAR */
 #sidebar { 
   float:right;
-  width:10%;
+  width:15%;
   padding:10px;
   background:rgb(0, 0, 0); 
   height:100%;
@@ -302,4 +302,8 @@ ul.messages {
 
 .delete-href {
   color: aliceblue;
+}
+
+.delete-href:hover {
+  color: rgb(201, 201, 49);
 }
