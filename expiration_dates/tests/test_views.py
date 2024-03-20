@@ -247,6 +247,12 @@ class TestEditExpirationDatesEntityView(TestCase):
         self.assertFalse(self.exp_date_entity1.quantity ==
                          quantity_for_compare_in_assert)
 
+    def test_view_template_used(self):
+        resp = self.client.get(reverse('edit_exp_date', kwargs={
+                               'pk': self.exp_date_entity1.pk}))
+        self.assertTemplateUsed(
+            resp, 'expiration_dates/add_expiration_dates_entity.html')
+
 
 class TestDeleteExpirationDatesEntityView(TestCase):
     def setUp(self) -> None:
