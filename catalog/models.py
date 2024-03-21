@@ -3,6 +3,27 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 from .utils import slugify
 
+from phonenumber_field.modelfields import PhoneNumberField
+
+
+class GoodsProvider(models.Model):
+    name = models.CharField(max_length=255, db_index=True,
+                            verbose_name='Название поставщика')
+    mail = models.EmailField(blank=True, verbose_name='e-mail', max_length=254)
+    providers_phone = PhoneNumberField(blank=True, region="RU")
+    contact_name = models.CharField(max_length=255, db_index=True,
+                                    verbose_name='Контактное лицо')
+    contact_name_phone = PhoneNumberField(
+        blank=True, region="RU")
+    address = models.CharField(max_length=255, db_index=True,
+                               verbose_name='Адрес')
+    country = models.ForeignKey('catalog.Country',
+                                on_delete=models.DO_NOTHING,
+                                related_name='good_providers',
+                                null=True,
+                                blank=True,
+                                verbose_name='Страна')
+
 
 class Country(models.Model):
     name = models.CharField(max_length=100)
@@ -82,6 +103,12 @@ class Nomenclature(models.Model):
         null=True,
         blank=True,
     )
+    goods_provider = models.ForeignKey(
+        GoodsProvider,
+        on_delete=models.DO_NOTHING,
+        related_name='nomenclatures',
+        null=True,
+        blank=True,)
 
     class Meta:
         ordering = ["name", "-cost"]

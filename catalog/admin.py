@@ -3,9 +3,9 @@ from .models import Category, Country, Nomenclature
 
 
 @admin.register(Nomenclature)
-class PostAdmin(admin.ModelAdmin):
+class NomenclatureAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'weight_or_piece',
-                    'cost', 'barcode', 'country_made_id', 'slug', 'user',)
+                    'cost', 'barcode', 'country_made_id', 'goods_provider', 'slug', 'user',)
     list_display_links = ('id', 'name',)
     list_filter = ('weight_or_piece',)
     search_fields = ('name', 'cost', 'category__name')
@@ -23,9 +23,8 @@ class CategoryAdmin(admin.ModelAdmin):
 
 
 @admin.register(Country)
-class CategoryAdmin(admin.ModelAdmin):
+class CountryAdmin(admin.ModelAdmin):
     list_display = ('id', 'name')
     list_display_links = ('id', 'name')
     search_fields = ('name',)
     ordering = ['name']
-

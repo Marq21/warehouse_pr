@@ -32,7 +32,8 @@ urlpatterns = [
     path('logs/', include('actions.urls')),
     path('chat/', include('chat.urls', namespace='chat')),
     path('inventory/', include('inventory.urls')),
-    path('exp_date/', include('expiration_dates.urls'))
+    path('exp_date/', include('expiration_dates.urls')),
+    path('goods_receipt/', include('goods_receipt.urls'))
 ]
 
 if settings.DEBUG:
