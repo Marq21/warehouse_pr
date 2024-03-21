@@ -1,4 +1,4 @@
-from catalog.models import Country, Nomenclature, get_barcode, get_new_barcode
+from catalog.models import Country, GoodsProvider, Nomenclature, get_barcode, get_new_barcode
 from warehouse_pr.tests import TestBasedModel
 
 
@@ -62,3 +62,16 @@ class CountryModelTest(TestBasedModel):
         name = 'Test_Country'
         country = Country.objects.get(name=name)
         self.assertEqual(str(country), 'Test_Country')
+
+
+class GoodsProviderModelTest(TestBasedModel):
+
+    def test_str(self):
+        tested_name = 'Test_Provider'
+        self.assertEqual(
+            tested_name, str(GoodsProvider.objects.get(name='Test_Provider')))
+
+    def test_str(self):
+        tested_name = ''
+        self.assertNotEqual(
+            tested_name, str(GoodsProvider.objects.get(name='Test_Provider')))

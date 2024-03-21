@@ -12,11 +12,12 @@ class GoodsProvider(models.Model):
     mail = models.EmailField(blank=True, verbose_name='e-mail', max_length=254)
     providers_phone = PhoneNumberField(blank=True, region="RU")
     contact_name = models.CharField(max_length=255, db_index=True,
-                                    verbose_name='Контактное лицо')
+                                    verbose_name='Контактное лицо',
+                                    blank=True,)
     contact_name_phone = PhoneNumberField(
         blank=True, region="RU")
     address = models.CharField(max_length=255, db_index=True,
-                               verbose_name='Адрес')
+                               verbose_name='Адрес', blank=True,)
     country = models.ForeignKey('catalog.Country',
                                 on_delete=models.DO_NOTHING,
                                 related_name='good_providers',

@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
 from actions.utils import create_action
-from catalog.models import Category, Country, Nomenclature
+from catalog.models import Category, Country, GoodsProvider, Nomenclature
 
 
 class TestBasedModel(TestCase):
@@ -14,6 +14,10 @@ class TestBasedModel(TestCase):
 
         Country.objects.create(
             name='Test_Country')
+
+        GoodsProvider.objects.create(
+            name='Test_Provider',
+        )
 
         for category_num in range(number_of_cats):
             parse_int = int('00000000000') + category_num
