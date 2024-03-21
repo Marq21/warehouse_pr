@@ -24,6 +24,15 @@ class GoodsProvider(models.Model):
                                 blank=True,
                                 verbose_name='Страна')
 
+    class Meta:
+        ordering = ["name", "country"]
+
+    def __str__(self) -> str:
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('goods_provider_detail', args={self.pk})
+
 
 class Country(models.Model):
     name = models.CharField(max_length=100)

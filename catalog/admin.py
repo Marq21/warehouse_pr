@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Country, Nomenclature
+from .models import Category, Country, GoodsProvider, Nomenclature
 
 
 @admin.register(Nomenclature)
@@ -28,3 +28,13 @@ class CountryAdmin(admin.ModelAdmin):
     list_display_links = ('id', 'name')
     search_fields = ('name',)
     ordering = ['name']
+
+
+@admin.register(GoodsProvider)
+class NomenclatureAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'mail',
+                    'providers_phone', 'contact_name', 'contact_name_phone', 'address', 'country',)
+    list_display_links = ('id', 'name',)
+    list_filter = ('contact_name_phone', 'country')
+    search_fields = ('name', 'contact_name', 'country')
+    ordering = ['name', 'country']
