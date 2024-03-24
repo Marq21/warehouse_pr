@@ -1,0 +1,39 @@
+{% extends 'base_generic.html' %}
+{% block content %}
+    <h1>Список товаров</h1>
+    {% if providers %}
+    <table class='nom-table'>
+      <tr>
+        <th>№</th>
+        <th>Название</th>
+        <th>e-mail</th>
+        <th>Телефон поставщика</th>
+        <th>Контактное лицо</th>
+        <th>Адрес</th>
+        <th>Страна</th>
+      </tr>
+      {% for provider in providers %}
+          <tr>
+             <td>{{ forloop.counter }}</td> 
+             <td><a class="td-nomenclature" href="{{ provider.get_absolute_url }}">{{ provider.name }}</a></td>
+             <td>{{provider.mail}}</td>
+             <td>{{ provider.providers_phone }}</td>
+             <td>{{ provider.contact_name }}</td>
+             <td>{{ provider.contact_name_phone }}</td>
+             <td>{{ provider.address }}</td>
+             <td>{% if provider.country == None %}----{% else %}
+                <a class="td-nomenclature" href="{{ provider.country.get_absolute_url }}">
+                    {{ provider.country }}
+                </a>{% endif %}</td>      
+          </tr>
+      {% endfor %}
+    </table>
+    {% else %}
+      <p>Base is empty</p>
+    {% endif %}
+    <button class="btn btn-primary">
+        <a class="delete-href" href="{% url 'add_provider' %}">
+          Добавить поставщика
+        </a>
+    </button>
+{% endblock %}

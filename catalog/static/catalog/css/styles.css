@@ -169,7 +169,6 @@ p.date {
 p.form-field {
   display: flex;
   justify-content: space-between;
-  width: 40%;
 }
 
 p.form-field-photo {

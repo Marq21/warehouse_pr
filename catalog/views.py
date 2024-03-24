@@ -12,8 +12,8 @@ from django.views.generic import TemplateView
 from django.core.mail import send_mail
 
 from actions.utils import create_action
-from .forms import AddCountryForm, AddNomenclatureForm, EmailNomenclatureForm,  AddCategoryForm, SearchForm
-from .models import Country, Nomenclature, Category, get_new_barcode
+from .forms import AddCountryForm, AddNomenclatureForm, AddProviderForm, EmailNomenclatureForm,  AddCategoryForm, SearchForm
+from .models import Country, GoodsProvider, Nomenclature, Category, get_new_barcode
 
 
 class NomenclatureHome(TemplateView):
@@ -262,3 +262,66 @@ def index(request):
     nomenclature_list = Nomenclature.objects.all()
     return render(request, 'catalog/index.html',
                   context={'nomenclature_list': nomenclature_list, })
+
+
+class ProvidersListView(LoginRequiredMixin, generic.ListView):
+    model = GoodsProvider
+    queryset = GoodsProvider.objects.all()
+    context_object_name = 'providers'
+    template_name = 'catalog/providers-list.html'
+
+
+class AddProvider(LoginRequiredMixin, generic.CreateView):
+    form_class = AddProviderForm
+    template_name = 'catalog/add_provider.html'
+    success_url = reverse_lazy('providers_list')
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        provider = form.save(commit=False)
+        form.save()
+        create_action(self.request.user, 'Добавление поставщика',
+                      provider)
+        messages.success(self.request, 'Добавление поставщика.: успешно')
+        return super(AddProvider, self).form_valid(form)
+
+
+class ProviderDetailView(LoginRequiredMixin, generic.DetailView):
+    model = GoodsProvider
+    template_name = 'catalog/provider_detail.html'
+    context_object_name = 'goods_provider'
+
+
+class EditProvider(LoginRequiredMixin, generic.UpdateView):
+    model = GoodsProvider
+    form_class = AddProviderForm
+    template_name = 'catalog/add_provider.html'
+    success_url = reverse_lazy('providers_list')
+    context_object_name = 'goods_provider'
+    extra_context = {
+        'title': 'Изменение данных поставщика'
+    }
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        provider = form.save(commit=False)
+        form.save()
+        create_action(self.request.user, 'Изменение данных поставщика',
+                      provider)
+        messages.success(self.request, 'Изменение данных поставщика: успешно')
+        return super(EditProvider, self).form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, 'Изменение данных поставщика: ошибка')
+        return super(EditProvider, self).form_invalid(form)
+
+
+class DeleteProvider(LoginRequiredMixin, generic.DeleteView):
+    model = GoodsProvider
+    success_url = reverse_lazy('providers_list')
+    template_name = "catalog/delete_provider.html"
+
+    def get_context_data(self, **kwargs) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context["title"] = "Удалить поставщика"
+        return context

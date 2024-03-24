@@ -1,7 +1,7 @@
 from django import forms
 from captcha.fields import CaptchaField
 
-from .models import Country, Nomenclature, Category
+from .models import Country, GoodsProvider, Nomenclature, Category
 
 
 class CaptchaTestForm(forms.Form):
@@ -54,3 +54,14 @@ class EmailNomenclatureForm(forms.Form):
 
 class SearchForm(forms.Form):
     query = forms.CharField()
+
+
+class AddProviderForm(forms.ModelForm):
+
+    class Meta:
+        model = GoodsProvider
+        fields = ['name', 'mail', 'providers_phone', 'contact_name',
+                  'contact_name_phone', 'address', 'country']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-input'}),
+        }

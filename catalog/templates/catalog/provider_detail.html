@@ -1,0 +1,29 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+<div class="noms-detail">
+  <h2>Название поставщика: {{ goods_provider.name }}<h2>
+
+  <p class="detail-nom-item">e-mail: {{ goods_provider.mail }}</p>
+  <p class="detail-nom-item">Телефон: {{ goods_provider.providers_phone }}</p>
+  <p class="detail-nom-item">Контактное лицо: {{ goods_provider.contact_name }}</p>
+  <p class="detail-nom-item">Номер телефона контактного лица: {{ goods_provider.contact_name_phone }}</p>
+  <p class="detail-nom-item">Адрес: {{ goods_provider.address }}</p>
+  <p class="detail-nom-item">Страна: {{ goods_provider.country }}</p>
+  <br>
+  <p>
+    <button class="btn btn-warning">
+      <a class="delete-href" href="{% url 'edit_provider' goods_provider.pk %}">
+        Изменить
+      </a>
+    </button>  
+    <a>
+    <button class="btn btn-danger">    
+      <a class="delete-href" href="{% url 'delete_provider' goods_provider.pk %}">
+        Удалить
+      </a>
+    </button>
+  </p>
+</div>
+
+{% endblock %}

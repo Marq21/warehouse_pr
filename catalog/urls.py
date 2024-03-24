@@ -35,6 +35,16 @@ urlpatterns = [
     path('delete_country/<int:pk>',
          views.DeleteCountry.as_view(), name='delete-country'),
 
+    path('providers_list/', views.ProvidersListView.as_view(), name='providers_list'),
+    path('provider_detail/<int:pk>',
+         views.ProviderDetailView.as_view(), name='provider_detail'),
+    path('add_provider/', views.AddProvider.as_view(),
+         name='add_provider'),
+    path('edit_provider/<int:pk>',
+         views.EditProvider.as_view(), name='edit_provider'),
+    path('delete_provider/<int:pk>',
+         views.DeleteProvider.as_view(), name='delete_provider'),
+
     path('search/', views.nom_search, name='nom-search'),
     path('<int:nom_id>/share/',
          views.nom_share, name='nom_share'),
