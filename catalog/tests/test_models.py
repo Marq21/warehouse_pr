@@ -67,11 +67,11 @@ class CountryModelTest(TestBasedModel):
 class GoodsProviderModelTest(TestBasedModel):
 
     def test_str(self):
-        tested_name = 'Test_Provider'
+        tested_name = GoodsProvider.objects.last().name
         self.assertEqual(
-            tested_name, str(GoodsProvider.objects.get(name='Test_Provider')))
+            tested_name, str(GoodsProvider.objects.get(name=tested_name)))
 
     def test_str(self):
-        tested_name = ''
+        tested_name = GoodsProvider.objects.last()
         self.assertNotEqual(
-            tested_name, str(GoodsProvider.objects.get(name='Test_Provider')))
+            'NotTestedName', str(GoodsProvider.objects.get(name=tested_name)))

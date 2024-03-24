@@ -15,17 +15,15 @@ class TestBasedModel(TestCase):
         Country.objects.create(
             name='Test_Country')
 
-        GoodsProvider.objects.create(
-            name='Test_Provider',
-        )
-
         for category_num in range(number_of_cats):
             parse_int = int('00000000000') + category_num
             place_for_number = len(str(parse_int))
             result = ['0' for _ in range(11)]
             result[-place_for_number:] = str(parse_int)
             n_barcode = ''.join(result)
-
+            GoodsProvider.objects.create(
+                name='Test_Provider_%s' % category_num,
+            )
             cat = Category.objects.create(name='Category %s' % category_num)
             country = Country.objects.create(name='Country %s' % category_num)
             nom = Nomenclature.objects.create(name='Nomenclature %s' % category_num,

@@ -1,8 +1,8 @@
 from django.http import HttpResponseNotFound
 from django.test import RequestFactory
-from catalog.forms import AddCategoryForm, AddCountryForm, AddNomenclatureForm, EmailNomenclatureForm
-from catalog.models import Category, Country, Nomenclature
-from catalog.views import AddCategory, AddCountry, AddNomenclature, DeleteCountry, EditCategory, EditCountry, EditNomenclature, NomenclatureHome, nom_share
+from catalog.forms import AddCategoryForm, AddCountryForm, AddNomenclatureForm, AddProviderForm, EmailNomenclatureForm
+from catalog.models import Category, Country, GoodsProvider, Nomenclature
+from catalog.views import AddCategory, AddCountry, AddNomenclature, AddProvider, DeleteCountry, EditCategory, EditCountry, EditNomenclature, EditProvider, NomenclatureHome, nom_share
 from django.contrib.auth.models import User
 from django.urls import reverse
 from django.contrib import messages
@@ -122,6 +122,7 @@ class NomenclatureViewTest(TestBasedModel):
             resp.context_data['title'], "Удалить номенклатуру")
         self.assertFalse(
             resp.context_data['title'] == "")
+
 
 class CategoryViewTest(TestBasedModel):
 
@@ -345,3 +346,94 @@ class NomShareTest(TestBasedModel):
 
         self.assertTrue(form.is_valid())
         self.assertTrue(share_view.status_code, 200)
+
+
+class GoodsProviderTest(TestBasedModel):
+    def setUp(self) -> None:
+        self.factory = RequestFactory()
+        self.client.login(username='john', password='johnpassword')
+        self.user = User.objects.get(username='john')
+        return super().setUp()
+
+    def test_call_view_fail_blank(self):
+        response = self.client.post(
+            reverse('add_provider'), {})
+        self.assertFormError(response, 'form', 'name',
+                             'Это поле обязательно для заполнения.')
+
+    def test_create_view_POST_success_form_valid(self):
+
+        data = {
+            'name': 'Provider_CreateView_test',
+        }
+
+        form = AddProviderForm(data)
+        request = self.factory.post(reverse('add_provider'), data)
+        request.user = self.user
+        request._messages = messages.storage.default_storage(request)
+        add_view = AddProvider()
+        add_view.setup(request)
+        self.assertTrue(add_view.form_valid(form=form))
+        self.assertTrue(GoodsProvider.objects.get(
+            name='Provider_CreateView_test'))
+
+    def test_update_view_POST_form_invalid(self):
+        provider = GoodsProvider.objects.last()
+        data = {
+            'name': 'Provider_CreateView_test',
+            'mail': 'not_email_field',
+        }
+
+        form = AddProviderForm(data)
+        request = self.factory.post(
+            reverse('edit_provider', kwargs={'pk': provider.pk}), data)
+        request.user = self.user
+        request._messages = messages.storage.default_storage(request)
+        edit_view = EditProvider(object=provider)
+        edit_view.setup(request)
+        self.assertTrue(edit_view.form_invalid(form=form))
+
+    def test_update_view_POST_success_form_valid(self):
+        country = Country.objects.last()
+        provider = GoodsProvider.objects.last()
+        name_for_compare_in_assert = provider.name
+        data = {
+            'name': "New_Provider_Name",
+            'mail': 'mail@mail.ru',
+            'providers_phone': '+79769876655',
+            'contact_name': 'Лавров Игорь Валентинович',
+            'address': 'г. Брянск ул. Пушкина д 1',
+            'country': country,
+        }
+
+        form = AddProviderForm(data)
+        request = self.factory.post(
+            reverse('edit_provider', kwargs={'pk': provider.pk}), data)
+        request.user = self.user
+        request._messages = messages.storage.default_storage(request)
+        view = EditProvider(object=provider)
+        view.setup(request)
+        self.assertTrue(view.form_valid(form=form))
+        self.assertFalse(GoodsProvider.objects.get(
+            name='New_Provider_Name').name == name_for_compare_in_assert)
+        self.assertTrue(GoodsProvider.objects.get(
+            name='New_Provider_Name').mail == 'mail@mail.ru')
+        self.assertTrue(GoodsProvider.objects.get(
+            name='New_Provider_Name').providers_phone == '+79769876655')
+        self.assertTrue(GoodsProvider.objects.get(
+            name='New_Provider_Name').contact_name == 'Лавров Игорь Валентинович')
+        self.assertTrue(GoodsProvider.objects.get(
+            name='New_Provider_Name').address == 'г. Брянск ул. Пушкина д 1')
+        self.assertTrue(GoodsProvider.objects.get(
+            name='New_Provider_Name').country == country)
+
+    def test_delete_view_get_context(self):
+        provider = GoodsProvider.objects.last()
+        resp = self.client.get(reverse('delete_provider', kwargs={
+                               'pk': provider.pk}))
+        resp.user = self.user
+        self.assertIsInstance(resp.context_data, dict)
+        self.assertEqual(
+            resp.context_data['title'], "Удалить поставщика")
+        self.assertFalse(
+            resp.context_data['title'] == "")
