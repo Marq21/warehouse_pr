@@ -49,10 +49,14 @@
           {% endblock %}
         </div>
         <div class='chat'>
-          <a href="{% url 'chat:chat-room' %}"> Чат </a>
+          <button class="btn btn-success">
+            <a class="delete-href" href="{% url 'chat:chat-room' %}"> Чат </a>
+          </button>
         </div>
         <div class='logs'>
-          <a href="{% url 'show-actions' %}"> Логи </a>
+          <button class="btn btn-success">
+            <a class="delete-href" href="{% url 'show-actions' %}"> Логи </a>
+          </button>
         </div>
         {% block pagination %}
         {% endblock %}
