@@ -24,8 +24,14 @@
         {% endfor %}      
     </table>
     <div class='navigate_inv_done'>
-        <a href="{% url 'home' %}"> На главную </a> 
-        <a href="{% url 'list-inventory-task' %}"> К списку заданий </a>
-        <a href="{% url 'list_of_quantity' %}"> Остатки на складе </a> 
+        <button class="btn btn-primary">
+            <a class="delete-href" href="{% url 'home' %}"> На главную </a> 
+        </button>
+        <button class="btn btn-primary">
+            <a class="delete-href" href="{% url 'list-inventory-task' %}"> К списку заданий </a>
+        </button>
+        <button class="btn btn-primary">
+            <a class="delete-href" href="{% url 'list_of_quantity' %}"> Остатки на складе </a> 
+        </button>    
     </div>
 {% endblock %}

@@ -33,5 +33,7 @@
     {% else %}
         <p>Base is empty</p>
     {% endif %}
-        <a href="{% url 'create-inventory-task' %}"> Создать задание на пересчёт </a>
+    <button class="btn btn-primary">
+        <a class="delete-href" href="{% url 'create-inventory-task' %}"> Создать задание на пересчёт </a>
+    </button>
 {% endblock %}

@@ -41,8 +41,10 @@
     {% else %}
         <p>Нет товаров на пересчёт</p>
     {% endif %}
-    <form class='accept-task' action = "/inventory/accept_task/confirm/{{task.id}}" method = "POST">
-        {% csrf_token %}
-        <input type="submit" value="Завершить задание">
-    </form>
+    {% if task.status == 'IP' %}
+        <form class='accept-task' action ="{% url 'accept_task_confirm' task.pk %}" method = "POST">
+            {% csrf_token %}
+            <input type="submit" value="Завершить задание">
+         </form>
+    {% endif %}
 {% endblock %}
