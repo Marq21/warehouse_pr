@@ -110,7 +110,7 @@ def get_nearest_expiration_dates(request):
 
         if form.is_valid():
             exp_date_nearest_entity_list = ExpirationDateEntity.objects.filter(
-                date_of_expiration__gt=datetime.now() + timedelta(days=2),
+                date_of_expiration__gt=datetime.now() + timedelta(days=1),
                 date_of_expiration__lte=(
                     datetime.now() + timedelta(
                         days=form.cleaned_data['days_to_expiration']
